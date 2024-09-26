@@ -1,8 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { APIResponse } from './app.types';
 
 @Injectable()
 export class AppService {
-  getGreeting(): string {
-    return 'Welcome to Advertah Product Listing API';
+  getGreeting(): APIResponse {
+    return {
+      status: HttpStatus.OK,
+      message: 'Welcome to Advertah Product Listing API',
+    };
   }
 }
