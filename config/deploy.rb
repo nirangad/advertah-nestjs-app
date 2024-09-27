@@ -21,12 +21,7 @@ set :nvm_map_bins, %w{node npm}
 
 # Define NPM tasks
 namespace :deploy do
-  after :updated, :npm_install
-  after :npm_install, :build_nestjs
-  after :build_nestjs, :start_pm2
-  after :start_pm2, :restart_nginx
-
-  # Run npm install to install all dependencies
+  # Install npm dependencies after updating the code
   task :npm_install do
     on roles(:app) do
       within release_path do
@@ -34,6 +29,8 @@ namespace :deploy do
       end
     end
   end
+
+  after :updated, :npm_install
 
   # Build NestJS App
   task :build_nestjs do
@@ -44,18 +41,19 @@ namespace :deploy do
     end
   end
 
+  after :npm_install, :build_nestjs
+
   # Start or reload the NestJS app with PM2
   task :start_pm2 do
     on roles(:app) do
       within release_path do
-        # Check if the app is already running
         execute :pm2, "describe #{fetch(:application)} || pm2 start #{fetch(:pm2_config)} --name #{fetch(:application)}"
-
-        # If already running, reload the application
-        execute :pm2, "reload #{fetch(:application)}" # reload the app without downtime
+        execute :pm2, "reload #{fetch(:application)}"
       end
     end
   end
+
+  after :build_nestjs, :start_pm2
 
   # Restart Nginx after deploying
   task :restart_nginx do
@@ -63,4 +61,6 @@ namespace :deploy do
       execute :sudo, 'systemctl restart nginx'
     end
   end
+
+  after :start_pm2, :restart_nginx
 end
