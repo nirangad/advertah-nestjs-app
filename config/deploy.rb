@@ -47,6 +47,7 @@ namespace :deploy do
   task :start_pm2 do
     on roles(:app) do
       within release_path do
+        execute :pm2, "delete #{fetch(:application)}"
         execute :pm2, "describe #{fetch(:application)} || pm2 start #{fetch(:pm2_config)} --name #{fetch(:application)}"
         execute :pm2, "reload #{fetch(:application)}"
       end
