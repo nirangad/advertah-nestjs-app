@@ -22,7 +22,7 @@ set :nvm_map_bins, %w{node npm}
 # Define NPM tasks
 namespace :deploy do
   after :updated, :npm_install
-  after :updated, :build_nestjs
+  after :npm_install, :build_nestjs
   after :build_nestjs, :start_pm2
   after :start_pm2, :restart_nginx
 
