@@ -2,10 +2,7 @@
 require "capistrano/setup"
 
 # Include default deployment tasks
-require "capistrano/deploy"
-
-# To handle npm installs
-require 'capistrano/npm'  
+require "capistrano/deploy"  
 
 # Load the SCM plugin appropriate to your project:
 #

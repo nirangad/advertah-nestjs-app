@@ -2,6 +2,7 @@
 lock "~> 3.19.1"
 
 set :application, "product-listing-api"
+set :deploy_user, 'ubuntu'
 set :repo_url, "git@github.com:nirangad/advertah-nestjs-app.git"
 
 # Define the branch to deploy
@@ -20,10 +21,19 @@ set :nvm_map_bins, %w{node npm}
 
 # Define NPM tasks
 namespace :deploy do
-  after :updated, 'npm:install'
+  after :updated, :npm_install
   after :updated, :build_nestjs
   after :build_nestjs, :start_pm2
   after :start_pm2, :restart_nginx
+
+  # Run npm install to install all dependencies
+  task :npm_install do
+    on roles(:app) do
+      within release_path do
+        execute :npm, 'install'  # Run `npm install`
+      end
+    end
+  end
 
   # Build NestJS App
   task :build_nestjs do
