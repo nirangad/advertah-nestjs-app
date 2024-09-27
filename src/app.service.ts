@@ -6,7 +6,7 @@ export class AppService {
   getGreeting(): APIResponse {
     return {
       status: HttpStatus.OK,
-      message: 'Welcome to Advertah Product Listing API',
+      message: 'Welcome to Advertah Product Listing API v1.0',
     };
   }
 }
