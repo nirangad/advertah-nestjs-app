@@ -1,6 +1,6 @@
 {
-    "cSpell.words": [
-        "Advertah"
-    ],
-    "editor.tabSize": 2
+  "cSpell.words": ["Advertah"],
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true
 }
