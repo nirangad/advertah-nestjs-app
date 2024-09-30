@@ -3,9 +3,9 @@ import { APIResponse } from 'src/app.types';
 import { PartnerService } from './partner.service';
 import {
   Partner,
-  PartnerSearchParams,
   ProductFeedFormat,
-} from './partner.types';
+} from 'src/data/models/schemas/partner.schema';
+import { PartnerSearchParams } from './partner.types';
 
 @Controller('partner')
 export class PartnerController {

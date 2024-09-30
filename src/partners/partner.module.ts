@@ -3,6 +3,7 @@ import { PartnerService } from './partner.service';
 import { PartnerController } from './partner.controller';
 
 @Module({
+  imports: [],
   controllers: [PartnerController],
   providers: [PartnerService],
 })

@@ -1,7 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { APIResponse } from '../app.types';
-import { Partner, PartnerAPI, PartnerSearchParams } from './partner.types';
+import { PartnerSearchParams } from './partner.types';
 import { UtilityService } from 'src/utils/utility.service';
+import { Partner, PartnerAPI } from 'src/data/models/schemas/partner.schema';
 
 @Injectable()
 export class PartnerService {
