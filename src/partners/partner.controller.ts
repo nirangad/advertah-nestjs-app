@@ -1,37 +1,71 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { APIResponse } from 'src/app.types';
 import { PartnerService } from './partner.service';
-import {
-  Partner,
-  ProductFeedFormat,
-} from 'src/data/models/schemas/partner.schema';
-import { PartnerSearchParams } from './partner.types';
 
 @Controller('partner')
 export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}
 
-  @Get()
-  getProducts(): APIResponse {
-    return this.partnerService.getPartners();
-  }
+  // getAPILinks(partner: Partner) {
+  //   return this.partnerService.getAPILinks(partner);
+  // }
 
-  @Get('/search')
-  searchProducts(
-    @Query('query') query: string,
-    @Query('format') format: ProductFeedFormat,
-    @Query('active') active: boolean,
-  ): APIResponse {
-    const params: PartnerSearchParams = {
-      query,
-      format,
-      active,
+  @Get()
+  async getAllPartners(): Promise<APIResponse> {
+    const partners = await this.partnerService.getAllPartners();
+    return {
+      status: HttpStatus.OK,
+      message: partners,
     };
-    return this.partnerService.searchPartners(params);
   }
 
-  @Get()
-  getAPILinks(partner: Partner): APIResponse {
-    return this.partnerService.getAPILinks(partner);
+  @Get(':id')
+  async getPartner(@Param('id') id: string): Promise<APIResponse> {
+    const partner = await this.partnerService.getPartner(id);
+    let status = HttpStatus.OK;
+    if (!partner) {
+      status = HttpStatus.NOT_FOUND;
+    }
+    return {
+      status,
+      message: partner,
+    };
+  }
+
+  @Post()
+  async createPartner(@Body() partner: any): Promise<APIResponse> {
+    const newPartner = await this.partnerService.createPartner(partner);
+    let status = HttpStatus.OK;
+    if (!newPartner) {
+      status = HttpStatus.BAD_REQUEST;
+    }
+    return {
+      status,
+      message: newPartner,
+    };
+  }
+
+  @Put(':id')
+  async updatePartner(
+    @Param('id') id: string,
+    @Body() partner: any,
+  ): Promise<APIResponse> {
+    const newPartner = await this.partnerService.updatePartner(id, partner);
+    let status = HttpStatus.OK;
+    if (!newPartner) {
+      status = HttpStatus.BAD_REQUEST;
+    }
+    return {
+      status,
+      message: newPartner,
+    };
   }
 }

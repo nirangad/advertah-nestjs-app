@@ -47,7 +47,7 @@ export const definitions: Partial<ProductFeedDefinition>[] = [
 */
 export const merchants: Partial<Merchant>[] = [
   {
-    merchant_id: 'gafc73',
+    merchant_id: '25189',
     name: 'Boutiquefeel WW',
   },
 ];

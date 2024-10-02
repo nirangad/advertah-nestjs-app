@@ -19,9 +19,6 @@ export class ProductFeedParam extends Document {
   default: string;
 }
 
-export const ProductFeedParamSchema =
-  SchemaFactory.createForClass(ProductFeedParam);
-
 @Schema()
 export class ProductFeedDefinition extends Document {
   @Prop({ required: true })
@@ -30,10 +27,6 @@ export class ProductFeedDefinition extends Document {
   @Prop({ required: true })
   definition: string;
 }
-
-export const ProductFeedDefinitionSchema = SchemaFactory.createForClass(
-  ProductFeedDefinition,
-);
 
 @Schema()
 export class ProductFeed extends Document {
@@ -53,8 +46,6 @@ export class ProductFeed extends Document {
   })
   format: ProductFeedFormat;
 }
-
-export const ProductFeedSchema = SchemaFactory.createForClass(ProductFeed);
 
 @Schema()
 export class PartnerAPIQuery extends Document {
@@ -83,9 +74,6 @@ export class PartnerAPIQuery extends Document {
   currency: string;
 }
 
-export const PartnerAPIQuerySchema =
-  SchemaFactory.createForClass(PartnerAPIQuery);
-
 @Schema()
 export class PartnerAPI extends Document {
   @Prop({ required: true })
@@ -103,8 +91,6 @@ export class PartnerAPI extends Document {
   @Prop({ type: PartnerAPIQuery, _id: false, required: true })
   query: PartnerAPIQuery;
 }
-
-export const PartnerAPISchema = SchemaFactory.createForClass(PartnerAPI);
 
 @Schema()
 export class Merchant extends Document {

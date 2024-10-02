@@ -1,5 +1,3 @@
-import { ProductFeedFormat } from 'src/data/models/schemas/partner.schema';
-
 // export interface Partner {
 //   partner_id: string;
 //   name: string;
@@ -58,6 +56,5 @@ import { ProductFeedFormat } from 'src/data/models/schemas/partner.schema';
 
 export interface PartnerSearchParams {
   query: string;
-  format: ProductFeedFormat;
   active: boolean;
 }
