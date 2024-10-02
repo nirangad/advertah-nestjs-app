@@ -134,7 +134,9 @@ export class Partner extends Document {
   api: PartnerAPI[];
 
   @Prop({
-    type: [{ type: Types.ObjectId, ref: Merchant.name }],
+    // type: [{ type: Types.ObjectId, ref: Merchant.name }],
+    type: [Types.ObjectId],
+    ref: Merchant.name,
     required: true,
   })
   merchants: Types.ObjectId[];

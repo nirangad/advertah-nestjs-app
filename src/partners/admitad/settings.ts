@@ -40,18 +40,6 @@ export const definitions: Partial<ProductFeedDefinition>[] = [
   },
 ];
 
-/*
-  Set Following:
-  - productFeed
-  - definitions
-*/
-export const merchants: Partial<Merchant>[] = [
-  {
-    merchant_id: '25189',
-    name: 'Boutiquefeel WW',
-  },
-];
-
 export const query: Partial<PartnerAPIQuery> = {
   feed_id: '25186',
   website: '2700922',
@@ -81,9 +69,9 @@ export const api: Partial<PartnerAPI>[] = [
   - productFeed
   - definitions
 */
-export const awinMerchant: Partial<Merchant>[] = [
+export const merchants: Partial<Merchant>[] = [
   {
-    merchant_id: '58637',
+    merchant_id: '25189',
     name: 'Boutiquefeel WW',
   },
 ];

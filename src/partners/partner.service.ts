@@ -21,7 +21,7 @@ export class PartnerService {
   getPartner(id: string): Promise<Partner> {
     return this.partnerModel
       .findOne({ partner_id: id })
-      .populate('merchants')
+      .populate('merchants', 'name merchant_id')
       .exec();
   }
 
@@ -35,7 +35,7 @@ export class PartnerService {
       .findOneAndUpdate({ partner_id: id }, partnerData, {
         new: true,
       })
-      .populate('merchants')
+      .populate('merchants', 'name merchant_id')
       .exec();
   }
 
@@ -44,7 +44,10 @@ export class PartnerService {
   }
 
   getAllPartners(): Promise<Partner[]> {
-    return this.partnerModel.find().exec();
+    return this.partnerModel
+      .find()
+      .populate('merchants', 'name merchant_id')
+      .exec();
   }
 
   async getMerchant(id: string, merchantId: string): Promise<Merchant> {
@@ -54,6 +57,7 @@ export class PartnerService {
     }
     return this.merchantModel
       .findOne({ partner: partner._id, merchant_id: merchantId })
+      .populate('partner')
       .exec();
   }
 
