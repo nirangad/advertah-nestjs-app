@@ -107,6 +107,13 @@ export class Merchant extends Document {
   productFeed: ProductFeed;
 
   @Prop({
+    type: Types.ObjectId,
+    ref: 'Partner',
+    required: true,
+  })
+  partner: Types.ObjectId;
+
+  @Prop({
     type: [{ type: ProductFeedDefinition, _id: false }],
     required: true,
   })
@@ -133,7 +140,7 @@ export class Partner extends Document {
   api: PartnerAPI[];
 
   @Prop({
-    type: [{ type: Types.ObjectId, ref: Merchant.name }],
+    type: [{ type: Types.ObjectId, ref: 'Merchant' }],
     required: true,
   })
   merchants: Types.ObjectId[];

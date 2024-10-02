@@ -14,10 +14,6 @@ import { PartnerService } from './partner.service';
 export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}
 
-  // getAPILinks(partner: Partner) {
-  //   return this.partnerService.getAPILinks(partner);
-  // }
-
   @Get()
   async getAllPartners(): Promise<APIResponse> {
     const partners = await this.partnerService.getAllPartners();
@@ -68,4 +64,60 @@ export class PartnerController {
       message: newPartner,
     };
   }
+
+  @Get(':id/merchants/')
+  async getAllMerchants(@Param('id') id: string): Promise<APIResponse> {
+    const merchants = await this.partnerService.getAllMerchants(id);
+    return {
+      status: HttpStatus.OK,
+      message: merchants,
+    };
+  }
+
+  @Get(':id/merchants/:merchant_id')
+  async getMerchant(
+    @Param('id') id: string,
+    @Param('merchant_id') merchantId: string,
+  ): Promise<APIResponse> {
+    const merchants = await this.partnerService.getMerchant(id, merchantId);
+    return {
+      status: !merchants ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK,
+      message: merchants,
+    };
+  }
+
+  @Post(':id/merchants/')
+  async createMerchant(
+    @Param('id') id: string,
+    @Body() merchant: any,
+  ): Promise<APIResponse> {
+    const newMerchant = await this.partnerService.createMerchant(id, merchant);
+    return {
+      status: !newMerchant ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK,
+      message: newMerchant,
+    };
+  }
+
+  @Put(':id/merchants/:merchant_id')
+  async updateMerchant(
+    @Param('id') id: string,
+    @Param('merchant_id') merchantId: string,
+    @Body() merchant: any,
+  ): Promise<APIResponse> {
+    const updatedMerchant = await this.partnerService.updateMerchant(
+      id,
+      merchantId,
+      merchant,
+    );
+    return {
+      status: !updatedMerchant
+        ? HttpStatus.INTERNAL_SERVER_ERROR
+        : HttpStatus.OK,
+      message: updatedMerchant,
+    };
+  }
+
+  // getAPILinks(partner: Partner) {
+  //   return this.partnerService.getAPILinks(partner);
+  // }
 }
