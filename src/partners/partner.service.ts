@@ -7,19 +7,22 @@ import {
   Partner,
   PartnerAPI,
 } from 'src/data/models/schemas/partner.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class PartnerService {
   constructor(
     private readonly utilityService: UtilityService,
-    @InjectModel(Partner.name) private partnerModel: Model<Partner>,
-    @InjectModel(Merchant.name) private merchantModel: Model<Merchant>,
+    @InjectModel(Partner.name) private readonly partnerModel: Model<Partner>,
+    @InjectModel(Merchant.name) private readonly merchantModel: Model<Merchant>,
   ) {}
 
   getPartner(id: string): Promise<Partner> {
-    return this.partnerModel.findById(id).populate('merchants').exec();
+    return this.partnerModel
+      .findOne({ partner_id: id })
+      .populate('merchants')
+      .exec();
   }
 
   createPartner(partnerData: any): Promise<Partner> {
@@ -29,7 +32,7 @@ export class PartnerService {
 
   updatePartner(id: string, partnerData: any): Promise<Partner> {
     return this.partnerModel
-      .findByIdAndUpdate(id, partnerData, {
+      .findOneAndUpdate({ partner_id: id }, partnerData, {
         new: true,
       })
       .populate('merchants')
@@ -44,12 +47,14 @@ export class PartnerService {
     return this.partnerModel.find().exec();
   }
 
-  getAllMerchants(id: string): Promise<Partner> {
-    return this.partnerModel.findById(id).populate('merchants').exec();
-  }
-
-  getMerchant(id: string, merchantId: string): Promise<Merchant> {
-    return this.merchantModel.findOne({ partner: id, _id: merchantId }).exec();
+  async getMerchant(id: string, merchantId: string): Promise<Merchant> {
+    const partner = await this.getPartner(id);
+    if (!partner) {
+      throw new NotFoundException('Partner not found');
+    }
+    return this.merchantModel
+      .findOne({ partner: partner._id, merchant_id: merchantId })
+      .exec();
   }
 
   async createMerchant(id: string, merchantData: any): Promise<Merchant> {
@@ -59,11 +64,11 @@ export class PartnerService {
     }
     const newMerchant = new this.merchantModel({
       ...merchantData,
-      partner: id,
+      partner: partner._id,
     });
-    await newMerchant.save();
+    const createdMerchant = await newMerchant.save();
 
-    partner.merchants.push(newMerchant._id);
+    partner.merchants.push(createdMerchant._id as Types.ObjectId);
     await partner.save();
 
     return newMerchant;

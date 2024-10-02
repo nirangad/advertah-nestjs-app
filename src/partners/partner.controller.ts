@@ -10,7 +10,7 @@ import {
 import { APIResponse } from 'src/app.types';
 import { PartnerService } from './partner.service';
 
-@Controller('partner')
+@Controller('partners')
 export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}
 
@@ -67,10 +67,10 @@ export class PartnerController {
 
   @Get(':id/merchants/')
   async getAllMerchants(@Param('id') id: string): Promise<APIResponse> {
-    const merchants = await this.partnerService.getAllMerchants(id);
+    const partner = await this.partnerService.getPartner(id);
     return {
-      status: HttpStatus.OK,
-      message: merchants,
+      status: !partner ? HttpStatus.NOT_FOUND : HttpStatus.OK,
+      message: partner?.merchants || null,
     };
   }
 
@@ -79,6 +79,15 @@ export class PartnerController {
     @Param('id') id: string,
     @Param('merchant_id') merchantId: string,
   ): Promise<APIResponse> {
+    const partner = await this.partnerService.getPartner(id);
+
+    if (!partner) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: null,
+      };
+    }
+
     const merchants = await this.partnerService.getMerchant(id, merchantId);
     return {
       status: !merchants ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK,
@@ -91,6 +100,15 @@ export class PartnerController {
     @Param('id') id: string,
     @Body() merchant: any,
   ): Promise<APIResponse> {
+    const partner = await this.partnerService.getPartner(id);
+
+    if (!partner) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: null,
+      };
+    }
+
     const newMerchant = await this.partnerService.createMerchant(id, merchant);
     return {
       status: !newMerchant ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK,

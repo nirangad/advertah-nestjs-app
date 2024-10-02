@@ -15,7 +15,7 @@ export class ProductFeedParam extends Document {
   @Prop({ required: true })
   type: string;
 
-  @Prop({ required: true })
+  @Prop({ default: '' })
   default: string;
 }
 
@@ -94,10 +94,7 @@ export class PartnerAPI extends Document {
 
 @Schema()
 export class Merchant extends Document {
-  @Prop({ required: true })
-  _id: Types.ObjectId;
-
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   merchant_id: string;
 
   @Prop({ required: true })
@@ -124,10 +121,7 @@ export const MerchantSchema = SchemaFactory.createForClass(Merchant);
 
 @Schema()
 export class Partner extends Document {
-  @Prop({ required: true })
-  _id: Types.ObjectId;
-
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   partner_id: string;
 
   @Prop({ required: true })
@@ -140,7 +134,7 @@ export class Partner extends Document {
   api: PartnerAPI[];
 
   @Prop({
-    type: [{ type: Types.ObjectId, ref: 'Merchant' }],
+    type: [{ type: Types.ObjectId, ref: Merchant.name }],
     required: true,
   })
   merchants: Types.ObjectId[];

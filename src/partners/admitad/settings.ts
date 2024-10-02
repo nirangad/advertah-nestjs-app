@@ -78,6 +78,18 @@ export const api: Partial<PartnerAPI>[] = [
 
 /*
   Set Following:
+  - productFeed
+  - definitions
+*/
+export const awinMerchant: Partial<Merchant>[] = [
+  {
+    merchant_id: '58637',
+    name: 'Boutiquefeel WW',
+  },
+];
+
+/*
+  Set Following:
   - api
   - merchants
 */
