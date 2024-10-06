@@ -1,0 +1,20 @@
+{
+  "productId": "id",
+  "productName": "name",
+  "description": "description",
+  "merchantId": "vendorCode",
+  "merchantName": "vendor",
+  "currency": "currencyId",
+  "price": "price",
+  "oldPrice": "oldprice",
+  "available": "available",
+  "image": "picture",
+  "url": "url",
+  "category": "categoryId",
+  "type": "type",
+  "shippingCost": "local_delivery_cost",
+  "language": "",
+  "gtin": "",
+  "rawData": "rawData",
+  "updatedAt": "modified_time"
+}

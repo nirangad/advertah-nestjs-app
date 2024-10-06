@@ -1,48 +1,63 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
-@Schema()
-export class ProductImage extends Document {
-  @Prop({ required: true })
-  url: string;
-}
-
-export const ProductImageSchema = SchemaFactory.createForClass(ProductImage);
+import { Document, Types } from 'mongoose';
+import { Merchant } from './partner.schema';
 
 @Schema()
 export class Product extends Document {
   @Prop({ required: true })
-  name: string;
-
-  @Prop({ type: ProductImageSchema, required: true })
-  productImage: ProductImage;
+  productId: string;
 
   @Prop({ required: true })
-  price: number;
+  productName: string;
 
-  @Prop({ required: true })
-  currency: string;
-
-  @Prop({ required: true })
+  @Prop()
   description: string;
 
-  @Prop({ required: true })
+  @Prop({
+    type: Types.ObjectId,
+    ref: Merchant.name,
+    required: true,
+  })
+  merchant: Types.ObjectId;
+
+  @Prop()
+  currency: string;
+
+  @Prop()
+  price: string;
+
+  @Prop()
+  oldPrice: string;
+
+  @Prop()
+  available: boolean;
+
+  @Prop()
+  image: string;
+
+  @Prop()
+  url: string;
+
+  @Prop()
+  category: string;
+
+  @Prop()
+  type: string;
+
+  @Prop()
+  shippingCost: string;
+
+  @Prop()
   language: string;
 
-  @Prop({ default: false })
-  discount: boolean;
+  @Prop()
+  gtin: string;
 
-  @Prop({ default: false })
-  freeShipping: boolean;
+  @Prop()
+  rawData: string;
 
-  @Prop({ required: true })
-  partner: string;
-
-  @Prop({ required: true })
-  merchant: string;
-
-  @Prop({ required: true })
-  rawProduct: string;
+  @Prop()
+  updatedAt: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
