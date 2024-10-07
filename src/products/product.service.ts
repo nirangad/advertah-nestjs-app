@@ -35,4 +35,10 @@ export class ProductService {
       message: 'Product Created',
     };
   }
+
+  // mapCSVRecordToProduct(rawData: any): Product {}
+
+  // loadProductMapping(partner: string) {
+
+  // }
 }

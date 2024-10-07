@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import * as fastcsv from 'fast-csv';
+import * as fastCSV from 'fast-csv';
 
 @Injectable()
 export class UtilityService {
@@ -16,7 +16,7 @@ export class UtilityService {
   ) {
     const stream = fs.createReadStream(csvFile);
     const csvData = [];
-    const csvStream = fastcsv
+    const csvStream = fastCSV
       .parse({ headers: true, delimiter: delimiter })
       .on('data', (row) => {
         csvData.push(row);

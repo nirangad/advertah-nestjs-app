@@ -8,15 +8,25 @@ import {
   Partner,
   PartnerSchema,
 } from 'src/data/models/schemas/partner.schema';
+import { PartnerConfigurationController } from './partner.config.controller';
+import { PartnerConfigurationService } from './partner.config.service';
+import {
+  MerchantConfiguration,
+  MerchantConfigurationSchema,
+  PartnerConfiguration,
+  PartnerConfigurationSchema,
+} from 'src/data/models/schemas/partner.config.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Partner.name, schema: PartnerSchema },
       { name: Merchant.name, schema: MerchantSchema },
+      { name: PartnerConfiguration.name, schema: PartnerConfigurationSchema },
+      { name: MerchantConfiguration.name, schema: MerchantConfigurationSchema },
     ]),
   ],
-  controllers: [PartnerController],
-  providers: [PartnerService],
+  controllers: [PartnerConfigurationController, PartnerController],
+  providers: [PartnerConfigurationService, PartnerService],
 })
 export class PartnerModule {}

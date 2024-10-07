@@ -134,8 +134,4 @@ export class PartnerController {
       message: updatedMerchant,
     };
   }
-
-  // getAPILinks(partner: Partner) {
-  //   return this.partnerService.getAPILinks(partner);
-  // }
 }
