@@ -15,6 +15,8 @@ import {
   MerchantConfigurationSchema,
   PartnerConfiguration,
   PartnerConfigurationSchema,
+  PartnerProductMapping,
+  PartnerProductMappingSchema,
 } from 'src/data/models/schemas/partner.config.schema';
 
 @Module({
@@ -24,6 +26,7 @@ import {
       { name: Merchant.name, schema: MerchantSchema },
       { name: PartnerConfiguration.name, schema: PartnerConfigurationSchema },
       { name: MerchantConfiguration.name, schema: MerchantConfigurationSchema },
+      { name: PartnerProductMapping.name, schema: PartnerProductMappingSchema },
     ]),
   ],
   controllers: [PartnerConfigurationController, PartnerController],

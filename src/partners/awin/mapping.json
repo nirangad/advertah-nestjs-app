@@ -11,7 +11,7 @@
   "image": "large_image",
   "url": "aw_deep_link",
   "category": "category_name",
-  "type": "product_model",
+  "productType": "product_model",
   "shippingCost": "delivery_cost",
   "language": "language",
   "gtin": "product_GTIN",

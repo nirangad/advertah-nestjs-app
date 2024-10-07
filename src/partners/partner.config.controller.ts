@@ -45,6 +45,24 @@ export class PartnerConfigurationController {
     };
   }
 
+  @Post(':id/merchant/:mid')
+  async createMerchantConfiguration(
+    @Param('id') partnerId: string,
+    @Param('mid') merchantId: string,
+    @Body() merchantConfig: any,
+  ): Promise<APIResponse> {
+    const newMerchantConfig =
+      await this.partnerConfigService.createMerchantConfiguration(
+        partnerId,
+        merchantId,
+        merchantConfig,
+      );
+    return {
+      status: HttpStatus.OK,
+      message: newMerchantConfig,
+    };
+  }
+
   @Delete(':id')
   async deleteConfiguration(
     @Param('id') partnerId: string,

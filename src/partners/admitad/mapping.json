@@ -11,7 +11,7 @@
   "image": "picture",
   "url": "url",
   "category": "categoryId",
-  "type": "type",
+  "productType": "type",
   "shippingCost": "local_delivery_cost",
   "language": "",
   "gtin": "",

@@ -41,7 +41,7 @@ export class PartnerProductMapping extends Document {
   category: string;
 
   @Prop()
-  type: string;
+  productType: string;
 
   @Prop()
   shippingCost: string;
@@ -69,10 +69,11 @@ export class MerchantConfiguration extends Document {
     type: Types.ObjectId,
     ref: Merchant.name,
     required: true,
+    unique: true,
   })
   merchant: Types.ObjectId;
 
-  @Prop()
+  @Prop({ required: true, unique: true })
   merchantAlias: string;
 
   @Prop({ required: true })
@@ -95,13 +96,14 @@ export class PartnerConfiguration extends Document {
     type: Types.ObjectId,
     ref: Partner.name,
     required: true,
+    unique: true,
   })
   partner: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   partnerAlias: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   partnerId: string;
 
   @Prop({
