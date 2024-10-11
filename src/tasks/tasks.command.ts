@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { Command, Option } from 'nestjs-command';
 import { TasksService } from './tasks.service';
 
@@ -10,7 +9,7 @@ export class TasksCommand {
   constructor(private readonly tasksService: TasksService) {}
 
   // @Cron(CronExpression.EVERY_10_SECONDS)
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   readPartnerProductDataFeedTask() {
     this.logger.log('Reading Partner products feed...');
     this.tasksService.readProductFeedFile();
@@ -35,7 +34,7 @@ export class TasksCommand {
       type: 'string',
       alias: 'm',
     })
-    merchant: number,
+    merchant: string,
   ) {
     console.log('Starting manual data conversion task...', partner);
     try {
@@ -44,6 +43,53 @@ export class TasksCommand {
       console.error('INVALID PARAMETERS PROVIDED: ', err);
     } finally {
       console.log('Data conversion task completed.');
+    }
+  }
+
+  @Command({
+    command: 'fetch-data',
+    describe: 'Manually trigger product feed fetching',
+  })
+  async fetchProductFeedsCommand(
+    @Option({
+      name: 'partner',
+      describe: 'Partner ID',
+      type: 'string',
+      alias: 'p',
+    })
+    partner: string,
+    @Option({
+      name: 'merchant',
+      describe: 'Merchant ID',
+      type: 'string',
+      alias: 'm',
+    })
+    merchant: string,
+  ) {
+    if (!partner || !merchant) {
+      throw Error(
+        `Error: Both partner (-p) and merchant (-m) are required.
+        Usage: npx nestjs-command fetch-data -p <PARTNER ID> -m <MERCHANT ID>`,
+      );
+    }
+
+    try {
+      console.log(
+        'Update Product feed for Merchant [',
+        merchant,
+        '] of Partner [',
+        partner,
+        ']',
+      );
+      console.log('Please wait...');
+      const s3FileName = await this.tasksService.downloadProductFeeds(
+        partner,
+        merchant,
+      );
+      console.log('Uploaded file: ', s3FileName);
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      throw error;
     }
   }
 }

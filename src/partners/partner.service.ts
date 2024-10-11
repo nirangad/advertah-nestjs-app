@@ -6,21 +6,25 @@ import {
   Merchant,
   Partner,
   PartnerAPI,
+  ProductFeedFormat,
 } from 'src/data/models/schemas/partner.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
+import { AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH } from 'src/constants';
 
 @Injectable()
 export class PartnerService {
   constructor(
     private readonly utilityService: UtilityService,
+    private readonly configService: ConfigService,
     @InjectModel(Partner.name) private readonly partnerModel: Model<Partner>,
     @InjectModel(Merchant.name) private readonly merchantModel: Model<Merchant>,
   ) {}
 
-  getPartner(id: string): Promise<Partner> {
+  getPartner(partnerId: string): Promise<Partner> {
     return this.partnerModel
-      .findOne({ partner_id: id })
+      .findOne({ partner_id: partnerId })
       .populate('merchants', 'name merchant_id')
       .exec();
   }
@@ -30,9 +34,9 @@ export class PartnerService {
     return newPartner.save();
   }
 
-  updatePartner(id: string, partnerData: any): Promise<Partner> {
+  updatePartner(partnerId: string, partnerData: any): Promise<Partner> {
     return this.partnerModel
-      .findOneAndUpdate({ partner_id: id }, partnerData, {
+      .findOneAndUpdate({ partner_id: partnerId }, partnerData, {
         new: true,
       })
       .populate('merchants', 'name merchant_id')
@@ -50,8 +54,8 @@ export class PartnerService {
       .exec();
   }
 
-  async getMerchant(id: string, merchantId: string): Promise<Merchant> {
-    const partner = await this.getPartner(id);
+  async getMerchant(partnerId: string, merchantId: string): Promise<Merchant> {
+    const partner = await this.getPartner(partnerId);
     if (!partner) {
       throw new NotFoundException('Partner not found');
     }
@@ -61,8 +65,11 @@ export class PartnerService {
       .exec();
   }
 
-  async createMerchant(id: string, merchantData: any): Promise<Merchant> {
-    const partner = await this.getPartner(id);
+  async createMerchant(
+    partnerId: string,
+    merchantData: any,
+  ): Promise<Merchant> {
+    const partner = await this.getPartner(partnerId);
     if (!partner) {
       throw new NotFoundException('Partner not found');
     }
@@ -79,11 +86,11 @@ export class PartnerService {
   }
 
   async updateMerchant(
-    id: string,
+    partnerId: string,
     merchantId: string,
     merchantData: any,
   ): Promise<Merchant> {
-    const partner = await this.getPartner(id);
+    const partner = await this.getPartner(partnerId);
     if (!partner) {
       throw new NotFoundException('Partner not found');
     }
@@ -95,6 +102,23 @@ export class PartnerService {
       .exec();
   }
 
+  async getPartnerAndMerchant(partnerId: string, merchantId: string) {
+    const partner = await this.getPartner(partnerId);
+    if (!partner) {
+      throw new NotFoundException('Partner not found');
+    }
+
+    const merchant = await this.getMerchant(partnerId, merchantId);
+
+    if (!merchant) {
+      throw new NotFoundException('Merchant not found');
+    }
+    return {
+      partner,
+      merchant,
+    };
+  }
+
   searchPartners(params: PartnerSearchParams): APIResponse {
     console.log(params);
     return {
@@ -103,14 +127,23 @@ export class PartnerService {
     };
   }
 
-  async getAPILinks(id: string) {
-    const partner = await this.getPartner(id);
-    if (!partner) {
-      throw new NotFoundException('Partner not found');
+  async getMerchantProductFeedURL(partnerId: string, merchantId: string) {
+    const { partner, merchant } = await this.getPartnerAndMerchant(
+      partnerId,
+      merchantId,
+    );
+
+    if (!partner || !merchant) {
+      throw new NotFoundException('Partner/Merchant not found');
     }
+
     return {
-      status: HttpStatus.OK,
-      message: partner.api.map((api) => this.generatePartnerAPILink(api)),
+      feedURL: merchant.productFeed.rawURL,
+      s3FilePath: this.generateS3FileName(
+        partner,
+        merchant,
+        merchant.productFeed.format,
+      ),
     };
   }
 
@@ -122,5 +155,16 @@ export class PartnerService {
       usage: params.usage,
       url: `${params.scheme}://${params.host}${params.filename}?${queryParams.join('&')}`,
     };
+  }
+
+  async generateS3FileName(
+    partner: Partner,
+    merchant: Merchant,
+    format: ProductFeedFormat,
+  ) {
+    return `${AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH}/${partner.partner_id}/${merchant.merchant_id}/${partner.partner_id}_${merchant.name}_${merchant.merchant_id}.${format}`.replace(
+      ' ',
+      '-',
+    );
   }
 }

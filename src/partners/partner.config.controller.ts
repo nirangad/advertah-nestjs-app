@@ -27,11 +27,10 @@ export class PartnerConfigurationController {
 
   @Get(':id')
   async getConfiguration(@Param('id') partnerId: string): Promise<APIResponse> {
-    const partners =
-      await this.partnerConfigService.getConfiguration(partnerId);
+    const config = await this.partnerConfigService.getConfiguration(partnerId);
     return {
       status: HttpStatus.OK,
-      message: partners,
+      message: config,
     };
   }
 

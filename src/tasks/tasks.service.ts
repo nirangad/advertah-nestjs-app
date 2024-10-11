@@ -1,86 +1,38 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { join } from 'path';
+import { PartnerConfigurationService } from 'src/partners/partner.config.service';
+import { PartnerService } from 'src/partners/partner.service';
 import { UtilityService } from 'src/utils/utility.service';
 
 @Injectable()
 export class TasksService {
   private readonly logger = new Logger(TasksService.name);
-
-  private readonly assetsRawDataFiles = {
-    default: {
-      partner: 'admitad',
-      merchant: 0,
-    },
-    admitad: {
-      root: 'raw_data/Admitad',
-      files: [
-        'Boutiquefeel WW_25189.csv',
-        'ChicMe WW_25181.csv',
-        'Cotosen WW_24921.csv',
-        'Geekbuying WW_15502.csv',
-        'Glasseslit WW_17760.csv',
-        'Gshopper Many GEOs_25701.csv',
-        'Wayrates WW_21839.csv',
-      ],
-    },
-    awin: {
-      root: 'raw_data/Awin',
-      files: ['Cronjager.csv', 'Dunleath.csv'],
-    },
-  };
-
-  constructor(private readonly utilityService: UtilityService) {}
+  constructor(
+    private readonly utilityService: UtilityService,
+    private readonly partnerService: PartnerService,
+    private readonly partnerConfigurationService: PartnerConfigurationService,
+  ) {}
   async readProductFeedFile(
     partner: string | undefined = undefined,
     merchant: number | undefined = undefined,
   ) {
     if (!partner || !merchant) {
-      partner = this.assetsRawDataFiles.default.partner;
-      merchant = this.assetsRawDataFiles.default.merchant;
+      this.logger.error('Partner and/or Merchant params are missing');
     }
-
-    if (!this.assetsRawDataFiles[partner]) {
-      throw new TypeError(`Unknown Partner: ${partner}`);
-    }
-
-    if (!this.assetsRawDataFiles[partner].files[merchant]) {
-      throw new TypeError(`Unknown Merchant: ${partner} => ${merchant}`);
-    }
-
-    const csvPath = join(
-      __dirname,
-      '..',
-      '..',
-      'assets',
-      this.assetsRawDataFiles[partner].root,
-      this.assetsRawDataFiles[partner].files[merchant],
-    );
-
-    const csvFile = [];
-    await this.utilityService.loadCSV(
-      csvPath,
-      ';',
-      (row) => {
-        csvFile.push(row);
-      },
-      (csvData) => {
-        console.log(
-          '[CRON COMPLETE]:  ',
-          csvData.length,
-          csvData[0],
-          csvData[1],
-        );
-      },
-    );
   }
 
-  convertData(partner: string, merchant: number) {
-    this.logger.log(
-      'Reading Partner products feed...',
-      `Partner: ${partner}`,
-      `Merchant: ${this.assetsRawDataFiles[partner].files[merchant]}`,
-    );
-    this.readProductFeedFile(partner, merchant);
-    this.logger.log('Reading Completed');
+  convertData(partnerId: string, merchantId: string) {
+    //this.readProductFeedFile(partner, merchant);
+    this.logger.log(partnerId, merchantId, 'Reading Completed');
+  }
+
+  async downloadProductFeeds(partnerId: string, merchantId: string) {
+    const { feedURL, s3FilePath } =
+      await this.partnerService.getMerchantProductFeedURL(
+        partnerId,
+        merchantId,
+      );
+    const s3FilePathString =
+      s3FilePath instanceof Promise ? await s3FilePath : s3FilePath;
+    return await this.utilityService.streamFileToS3(feedURL, s3FilePathString);
   }
 }
