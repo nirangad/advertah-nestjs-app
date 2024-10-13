@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { APIResponse } from 'src/app.types';
 import { ProductSearchParams } from './products.types';
@@ -30,6 +30,9 @@ export class ProductsController {
       discount,
       freeShipping,
     };
-    return this.productService.searchProducts(params);
+    return {
+      status: HttpStatus.OK,
+      message: this.productService.searchProducts(params),
+    };
   }
 }

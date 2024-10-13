@@ -4,6 +4,7 @@ import { TasksService } from './tasks.service';
 import { TasksCommand } from './tasks.command';
 import { PartnerConfigurationService } from 'src/partners/partner.config.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Product, ProductSchema } from 'src/data/models/schemas/product.schema';
 import {
   PartnerConfiguration,
   PartnerConfigurationSchema,
@@ -19,11 +20,13 @@ import {
   MerchantSchema,
 } from 'src/data/models/schemas/partner.schema';
 import { PartnerService } from 'src/partners/partner.service';
+import { ProductService } from 'src/products/product.service';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     MongooseModule.forFeature([
+      { name: Product.name, schema: ProductSchema },
       { name: Partner.name, schema: PartnerSchema },
       { name: Merchant.name, schema: MerchantSchema },
       { name: PartnerConfiguration.name, schema: PartnerConfigurationSchema },
@@ -34,6 +37,7 @@ import { PartnerService } from 'src/partners/partner.service';
   providers: [
     TasksService,
     TasksCommand,
+    ProductService,
     PartnerService,
     PartnerConfigurationService,
   ],

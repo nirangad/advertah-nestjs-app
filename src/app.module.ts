@@ -23,9 +23,10 @@ import { join } from 'path';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
+      useFactory: async (configService: ConfigService) => {
+        const connectionString = `mongodb://${await configService.get('MONGODB_USERNAME')}:${await configService.get('MONGODB_PASSWORD')}@${await configService.get('MONGODB_SERVER')}:${await configService.get('MONGODB_PORT')}/${await configService.get('MONGODB_DATABASE')}`;
         return {
-          uri: `mongodb://${configService.get('MONGODB_USERNAME')}:${configService.get('MONGODB_PASSWORD')}@${configService.get('MONGODB_SERVER')}:${configService.get('MONGODB_PORT')}/${configService.get('MONGODB_DATABASE')}`,
+          uri: connectionString,
           connectionFactory: (connection) => {
             connection.plugin((schema) => {
               schema.set('timestamps', true);

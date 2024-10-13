@@ -8,7 +8,6 @@ import {
 } from 'src/data/models/schemas/partner.config.schema';
 import { DeleteResult } from 'mongodb';
 import { PartnerService } from './partner.service';
-import { Merchant, Partner } from 'src/data/models/schemas/partner.schema';
 
 @Injectable()
 export class PartnerConfigurationService {
@@ -104,16 +103,7 @@ export class PartnerConfigurationService {
   }
 
   async updateMerchantS3FilePath(s3FilePath: string, merchantId: string) {
-    console.debug(
-      '[PartnerConfigurationService::updateMerchantS3FilePath] [params]: ',
-      s3FilePath,
-      merchantId,
-    );
     const merchantConfig = await this.getMerchantConfiguration(merchantId);
-    console.debug(
-      '[PartnerConfigurationService::updateMerchantS3FilePath]: [getMerchantConfiguration]',
-      merchantConfig,
-    );
     if (!merchantConfig) {
       throw new NotFoundException('Merchant Configurations not found');
     }

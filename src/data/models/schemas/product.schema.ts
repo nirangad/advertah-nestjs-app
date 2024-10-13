@@ -4,7 +4,7 @@ import { Merchant } from './partner.schema';
 
 @Schema()
 export class Product extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   productId: string;
 
   @Prop({ required: true })
@@ -35,7 +35,7 @@ export class Product extends Document {
   @Prop()
   image: string;
 
-  @Prop()
+  @Prop({ unique: true, sparse: true })
   url: string;
 
   @Prop()
