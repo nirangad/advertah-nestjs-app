@@ -167,7 +167,6 @@ export class UtilityService {
         return this.toNumber(value);
       default:
         return value;
-        break;
     }
   }
 

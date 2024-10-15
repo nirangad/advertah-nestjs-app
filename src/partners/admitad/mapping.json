@@ -16,5 +16,5 @@
   "language": "",
   "gtin": "",
   "rawData": "rawData",
-  "updatedAt": "modified_time"
+  "lastUpdatedAt": "modified_time"
 }

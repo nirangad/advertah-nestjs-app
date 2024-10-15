@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, SortOrder } from 'mongoose';
+import { Model, SortOrder, Types } from 'mongoose';
 
 import {
   PER_PAGE,
@@ -14,7 +14,6 @@ import {
   PartnerProductMapping,
 } from 'src/data/models/schemas/partner.config.schema';
 import { UtilityService } from 'src/utils/utility.service';
-import { Partner } from 'src/data/models/schemas/partner.schema';
 
 @Injectable()
 export class ProductService {
@@ -22,7 +21,6 @@ export class ProductService {
     private readonly utilityService: UtilityService,
     @InjectModel(Product.name)
     private readonly productModel: Model<Product>,
-    @InjectModel(Partner.name) private readonly partnerModel: Model<Partner>,
   ) {}
 
   getProducts() {
@@ -47,6 +45,7 @@ export class ProductService {
 
     const products = await this.productModel
       .find(filter)
+      .populate('merchant', 'merchant_id name partner _id ')
       .sort(sort)
       .skip(skip)
       .limit(itemsPerPage)
@@ -68,6 +67,7 @@ export class ProductService {
       freeShipping = false,
       minPrice = undefined,
       maxPrice = undefined,
+      merchant = undefined,
       currentPage = 1,
       itemsPerPage = PER_PAGE,
       sortBy = ProductSortable.UPDATED_AT,
@@ -85,7 +85,7 @@ export class ProductService {
       ];
     }
 
-    // 2. Filter by availability & free shipping
+    // 2. Filter by availability, free shipping & merchant
     if (typeof available === 'boolean' && available) {
       filter.available = true;
     }
@@ -94,16 +94,23 @@ export class ProductService {
       filter.shippingCost = 0;
     }
 
+    if (merchant && Types.ObjectId.isValid(merchant)) {
+      filter.merchant = new Types.ObjectId(merchant);
+    }
+
     // 3. Filter by price range (minPrice and maxPrice)
-    if (minPrice !== undefined || maxPrice !== undefined) {
+    const minPriceNumber = parseFloat(`${minPrice}`);
+    const maxPriceNumber = parseFloat(`${maxPrice}`);
+
+    if (!isNaN(minPriceNumber) || !isNaN(maxPriceNumber)) {
       filter.$expr = { $and: [] };
 
-      if (minPrice !== undefined) {
-        filter.$expr.$and.push({ $gte: [{ $toDouble: '$price' }, minPrice] }); // Price >= minPrice
+      if (!isNaN(minPriceNumber)) {
+        filter.$expr.$and.push({ $gte: ['$price', minPriceNumber] });
       }
 
-      if (maxPrice !== undefined) {
-        filter.$expr.$and.push({ $lte: [{ $toDouble: '$price' }, maxPrice] }); // Price <= maxPrice
+      if (!isNaN(maxPriceNumber)) {
+        filter.$expr.$and.push({ $lte: ['$price', maxPriceNumber] });
       }
     }
 
@@ -152,7 +159,6 @@ export class ProductService {
     merchantConfig,
   ): Promise<Product> {
     const product = new this.productModel();
-    const productData: any = {};
     ProductSchema.eachPath((field, fieldType) => {
       if (field.startsWith('_') || field === '__v') {
         return;
@@ -162,8 +168,8 @@ export class ProductService {
         csvDataRow[csvField],
         fieldType.instance,
       );
+
       product[field] = castedField;
-      productData[field] = castedField;
     });
 
     product.merchant = merchantConfig.merchant;

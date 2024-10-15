@@ -56,7 +56,7 @@ export class PartnerProductMapping extends Document {
   rawData: string;
 
   @Prop()
-  updatedAt: string;
+  lastUpdatedAt: string;
 }
 
 export const PartnerProductMappingSchema = SchemaFactory.createForClass(

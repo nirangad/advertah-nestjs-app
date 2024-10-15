@@ -23,11 +23,11 @@ export class Product extends Document {
   @Prop()
   currency: string;
 
-  @Prop()
-  price: string;
+  @Prop({ default: 0 })
+  price: number;
 
-  @Prop()
-  oldPrice: string;
+  @Prop({ default: 0 })
+  oldPrice: number;
 
   @Prop()
   available: boolean;
@@ -44,8 +44,8 @@ export class Product extends Document {
   @Prop()
   type: string;
 
-  @Prop()
-  shippingCost: string;
+  @Prop({ default: 0 })
+  shippingCost: number;
 
   @Prop()
   language: string;
@@ -57,7 +57,7 @@ export class Product extends Document {
   rawData: string;
 
   @Prop()
-  updatedAt: string;
+  lastUpdatedAt: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

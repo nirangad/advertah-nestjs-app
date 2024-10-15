@@ -16,5 +16,5 @@
   "language": "language",
   "gtin": "product_GTIN",
   "rawData": "rawData",
-  "updatedAt": "last_updated"
+  "lastUpdatedAt": "last_updated"
 }
