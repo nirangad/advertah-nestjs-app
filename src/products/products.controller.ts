@@ -7,32 +7,24 @@ import { ProductSearchParams } from './products.types';
 export class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
-  @Get()
-  getProducts(): APIResponse {
-    return this.productService.getProducts();
-  }
+  // query:*
+  // available:false
+  // freeShipping:false
+  // minPrice:undefined
+  // maxPrice:undefined
+  // currentPage:1
+  // itemsPerPage:20
+  // sortBy:updatedAt,
+  // sortDirection:asc
+  @Get('/')
+  async searchProducts(
+    @Query() params: ProductSearchParams,
+  ): Promise<APIResponse> {
+    const response = await this.productService.searchProducts(params);
 
-  @Get('/search')
-  searchProducts(
-    @Query('query') query: string,
-    @Query('minPrice') minPrice: number,
-    @Query('maxPrice') maxPrice: number,
-    @Query('merchant') merchant: string,
-    @Query('discount') discount: boolean,
-    @Query('freeShipping') freeShipping: boolean,
-  ): APIResponse {
-    // http://localhost:3030/products/search?query=nirannga&minPrice=100&maxPrice=2s00&merchant=advertah&discount=1&freeShipping=0
-    const params: ProductSearchParams = {
-      query,
-      minPrice,
-      maxPrice,
-      merchant,
-      discount,
-      freeShipping,
-    };
     return {
       status: HttpStatus.OK,
-      message: this.productService.searchProducts(params),
+      message: response,
     };
   }
 }

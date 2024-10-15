@@ -1,8 +1,27 @@
 export interface ProductSearchParams {
-  query: string;
-  minPrice: number;
-  maxPrice: number;
-  merchant: string;
-  discount: boolean;
-  freeShipping: boolean;
+  query?: string;
+  available?: boolean;
+  currentPage?: number;
+  itemsPerPage?: number;
+  sortBy?: ProductSortable;
+  sortDirection?: SortDirection;
+  minPrice?: number;
+  maxPrice?: number;
+  merchant?: string;
+  freeShipping?: boolean;
 }
+
+export enum ProductSortable {
+  PRODUCT_NAME = 'productName',
+  PRICE = 'price',
+  SHIPPING_COST = 'shippingCost',
+  UPDATED_AT = 'updatedAt',
+  CREATED_AT = 'createdAt',
+}
+
+export enum SortDirection {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export const PER_PAGE = 20;

@@ -1,9 +1,13 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 
-import { APIResponse } from '../app.types';
-import { ProductSearchParams } from './products.types';
+import {
+  PER_PAGE,
+  ProductSearchParams,
+  ProductSortable,
+  SortDirection,
+} from './products.types';
 import { Product, ProductSchema } from '../data/models/schemas/product.schema';
 import {
   MerchantConfiguration,
@@ -21,11 +25,8 @@ export class ProductService {
     @InjectModel(Partner.name) private readonly partnerModel: Model<Partner>,
   ) {}
 
-  getProducts(): APIResponse {
-    return {
-      status: HttpStatus.OK,
-      message: ['Product 01', 'Product 02', 'Product 03'],
-    };
+  getProducts() {
+    return this.productModel.find().exec();
   }
 
   async createProduct(product: Product) {
@@ -33,9 +34,99 @@ export class ProductService {
     return createdProduct.save();
   }
 
-  searchProducts(params: ProductSearchParams) {
-    console.log(params);
-    return params;
+  async searchProducts(params: ProductSearchParams) {
+    const {
+      filter,
+      sort,
+      skip,
+      totalProducts,
+      currentPage,
+      itemsPerPage,
+      totalPages,
+    } = await this.searchProductsQuery(params);
+
+    const products = await this.productModel
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(itemsPerPage)
+      .exec();
+
+    return {
+      totalProducts,
+      currentPage,
+      itemsPerPage,
+      totalPages,
+      products,
+    };
+  }
+
+  async searchProductsQuery(params: ProductSearchParams) {
+    const {
+      query = '*',
+      available = false,
+      freeShipping = false,
+      minPrice = undefined,
+      maxPrice = undefined,
+      currentPage = 1,
+      itemsPerPage = PER_PAGE,
+      sortBy = ProductSortable.UPDATED_AT,
+      sortDirection = SortDirection.DESC,
+    } = params;
+
+    const filter: any = {};
+
+    // 1. Apply search query for productName, description, and gtin
+    if (query && query != '*') {
+      filter.$or = [
+        { productName: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { gtin: { $regex: query, $options: 'i' } },
+      ];
+    }
+
+    // 2. Filter by availability & free shipping
+    if (typeof available === 'boolean' && available) {
+      filter.available = true;
+    }
+
+    if (typeof freeShipping === 'boolean' && freeShipping) {
+      filter.shippingCost = 0;
+    }
+
+    // 3. Filter by price range (minPrice and maxPrice)
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      filter.$expr = { $and: [] };
+
+      if (minPrice !== undefined) {
+        filter.$expr.$and.push({ $gte: [{ $toDouble: '$price' }, minPrice] }); // Price >= minPrice
+      }
+
+      if (maxPrice !== undefined) {
+        filter.$expr.$and.push({ $lte: [{ $toDouble: '$price' }, maxPrice] }); // Price <= maxPrice
+      }
+    }
+
+    // 4. Sort by updatedAt or any other field
+    const sortDirectionValue: SortOrder =
+      sortDirection === SortDirection.ASC ? 1 : -1;
+    const sort = { [sortBy]: sortDirectionValue };
+
+    // 5. Pagination
+    const skip = (currentPage - 1) * itemsPerPage;
+
+    // 6. Get the total count for pagination
+    const totalProducts = await this.productModel.countDocuments(filter);
+
+    return {
+      filter,
+      sort,
+      skip,
+      totalProducts,
+      currentPage,
+      itemsPerPage,
+      totalPages: Math.ceil(totalProducts / itemsPerPage),
+    };
   }
 
   async createProductForCSVRecord(
