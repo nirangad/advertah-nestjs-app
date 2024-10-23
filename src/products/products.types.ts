@@ -2,6 +2,7 @@ export interface ProductSearchParams {
   query?: string;
   available?: boolean;
   currentPage?: number;
+  discount: boolean;
   itemsPerPage?: number;
   sortBy?: ProductSortable;
   sortDirection?: SortDirection;

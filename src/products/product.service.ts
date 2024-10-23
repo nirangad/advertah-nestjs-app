@@ -44,7 +44,7 @@ export class ProductService {
     } = await this.searchProductsQuery(params);
 
     const products = await this.productModel
-      .find(filter)
+      .find(filter, { rawData: 0 })
       .populate('merchant', 'merchant_id name partner _id ')
       .sort(sort)
       .skip(skip)
@@ -61,9 +61,11 @@ export class ProductService {
   }
 
   async searchProductsQuery(params: ProductSearchParams) {
+    let defaultParams: ProductSearchParams = this.defaultSearchParams();
+    defaultParams = { ...defaultParams, ...params };
     const {
       query = '*',
-      available = false,
+      available = true,
       freeShipping = false,
       minPrice = undefined,
       maxPrice = undefined,
@@ -72,7 +74,10 @@ export class ProductService {
       itemsPerPage = PER_PAGE,
       sortBy = ProductSortable.UPDATED_AT,
       sortDirection = SortDirection.DESC,
-    } = params;
+    } = defaultParams;
+
+    console.log('Search Products params:');
+    console.log(defaultParams);
 
     const filter: any = {};
 
@@ -180,5 +185,21 @@ export class ProductService {
       return product.save();
     }
     console.error('[Construct Product]: Failed to save the new product');
+  }
+
+  private defaultSearchParams(): ProductSearchParams {
+    return {
+      available: true,
+      currentPage: 1,
+      discount: false,
+      freeShipping: false,
+      itemsPerPage: PER_PAGE,
+      maxPrice: undefined,
+      merchant: undefined,
+      minPrice: undefined,
+      query: '',
+      sortBy: ProductSortable.UPDATED_AT,
+      sortDirection: SortDirection.ASC,
+    };
   }
 }

@@ -5,6 +5,20 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   // mongoose.set('debug', true);
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: (origin, callback) => {
+      const allowedOrigins = ['http://localhost:4200'];
+
+      // Allow requests with no origin (e.g., mobile apps, curl requests)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(3030);
 }
 
