@@ -14,7 +14,9 @@ set :deploy_to, '/home/ubuntu/apps/advertah-nestjs-app'
 # Keep only the last 5 releases
 set :keep_releases, 5
 
-set :pm2_config, -> { "#{release_path}/ecosystem.config.js" } 
+set :pm2_config, -> { "#{release_path}/ecosystem.config.js" }
+
+set :npm_flags, '--production=false'
 
 set :nvm_node, 'v22.9.0'
 set :nvm_map_bins, %w{node npm}
