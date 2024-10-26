@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Command, Option } from 'nestjs-command';
+import { Command, CommandOptionsOption, Option } from 'nestjs-command';
 import { TasksService } from './tasks.service';
 
 @Injectable()
@@ -23,14 +23,14 @@ export class TasksCommand {
   async convertDataTask(
     @Option({
       name: 'partner',
-      describe: 'Partner code',
+      desc: 'Partner code',
       type: 'string',
       alias: 'p',
     })
     partner: string,
     @Option({
       name: 'merchant',
-      describe: 'Absolute path for CSV file',
+      desc: 'Absolute path for CSV file',
       type: 'string',
       alias: 'm',
     })
@@ -53,14 +53,14 @@ export class TasksCommand {
   async fetchProductFeedsCommand(
     @Option({
       name: 'partner',
-      describe: 'Partner ID',
+      desc: 'Partner ID',
       type: 'string',
       alias: 'p',
-    })
+    } as CommandOptionsOption)
     partner: string,
     @Option({
       name: 'merchant',
-      describe: 'Merchant ID',
+      desc: 'Merchant ID',
       type: 'string',
       alias: 'm',
     })
