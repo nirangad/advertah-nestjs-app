@@ -26,14 +26,14 @@ export class TasksCommand {
       desc: 'Partner code',
       type: 'string',
       alias: 'p',
-    })
+    } as CommandOptionsOption)
     partner: string,
     @Option({
       name: 'merchant',
       desc: 'Absolute path for CSV file',
       type: 'string',
       alias: 'm',
-    })
+    } as CommandOptionsOption)
     merchant: string,
   ) {
     console.log('Starting manual data conversion task...', partner);
@@ -63,7 +63,7 @@ export class TasksCommand {
       desc: 'Merchant ID',
       type: 'string',
       alias: 'm',
-    })
+    } as CommandOptionsOption)
     merchant: string,
   ) {
     if (!partner || !merchant) {
