@@ -18,9 +18,9 @@ import { join } from 'path';
   providers: [AppService, ConfigService],
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, './data/raw_data/'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, './data/raw_data/'),
+    // }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
