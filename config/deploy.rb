@@ -68,11 +68,8 @@ namespace :deploy do
   task :npm_clean_install do
     on roles(:app) do
       within release_path do
-        execute :rm, '-rf', 'node_modules'
-        execute :rm, '-rf', 'package-lock.json'
-        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm cache clean --force"'
-        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm install"'
-        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm install @types/node @types/commander"'
+        execute :npm, 'cache clean --force'
+        execute :npm, 'install'
       end
     end
   end
