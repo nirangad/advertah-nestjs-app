@@ -11,7 +11,7 @@ export class TasksController {
   ) {}
 
   @Get('fetch-data')
-  getGreeting(): APIResponse {
+  fetchData(): APIResponse {
     const connectionList = {
       '25186': ['25189', '25181', '24921', '15502', '17760', '25701', '21839'],
       awin_ltd: ['58637', '98661'],
@@ -33,6 +33,7 @@ export class TasksController {
             await this.partnerConfigService.updateMerchantS3FilePath(
               s3FileName,
               merchant,
+              partner,
             );
 
           if (!merchantConfig) {

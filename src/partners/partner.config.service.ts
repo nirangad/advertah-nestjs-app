@@ -102,13 +102,23 @@ export class PartnerConfigurationService {
     return this.partnerConfigModel.deleteOne({ partnerId: partnerId });
   }
 
-  async updateMerchantS3FilePath(s3FilePath: string, merchantId: string) {
+  async updateMerchantS3FilePath(
+    s3FilePath: string,
+    partnerId: string,
+    merchantId: string,
+  ) {
     const merchantConfig = await this.getMerchantConfiguration(merchantId);
     if (!merchantConfig) {
-      throw new NotFoundException('Merchant Configurations not found');
+      console.warn(
+        'Merchant Configurations not found. Creating new configurations..',
+      );
+      return this.createMerchantConfiguration(partnerId, merchantId, {
+        merchantId: merchantId,
+        s3FilePath: s3FilePath,
+      });
+    } else {
+      merchantConfig.s3FilePath = s3FilePath;
+      return merchantConfig.save();
     }
-
-    merchantConfig.s3FilePath = s3FilePath;
-    return merchantConfig.save();
   }
 }

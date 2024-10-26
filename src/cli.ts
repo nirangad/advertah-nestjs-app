@@ -54,6 +54,7 @@ async function bootstrap() {
           await partnerConfigService.updateMerchantS3FilePath(
             s3FileName,
             merchant,
+            partner,
           );
 
         if (!merchantConfig) {
