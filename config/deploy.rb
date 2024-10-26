@@ -18,52 +18,89 @@ set :pm2_config, -> { "#{release_path}/ecosystem.config.js" }
 
 set :npm_flags, '--production=false'
 
+set :nvm_type, :user
 set :nvm_node, 'v20.18.0'
 set :nvm_map_bins, %w{node npm}
 
+# Default value for :format is :airbrussh
+set :format, :airbrussh
+
+# Default value for :log_level is :debug
+set :log_level, :debug
+
+# Default value for :pty is false
+set :pty, true
+
+# Default value for :linked_files is []
+append :linked_files, '.env'
+
+# Default value for linked_dirs is []
+append :linked_dirs, 'node_modules'
+
+# Default value for default_env is {}
+set :default_env, {
+  NODE_ENV: 'production',
+  PATH: "$HOME/.nvm/versions/node/v20.17.0/bin:$PATH"
+}
+
 # Define NPM tasks
 namespace :deploy do
-  # Install npm dependencies after updating the code
-  task :npm_install do
+  desc 'Install correct Node version'
+  task :check_node_version do
     on roles(:app) do
       within release_path do
-        execute :npm, 'install'  # Run `npm install`
+        execute :bash, '-c', '"source ~/.nvm/nvm.sh && nvm use v20.17.0"'
       end
     end
   end
 
-  after :updated, :npm_install
-
-  # Build NestJS App
-  task :build_nestjs do
+  desc 'Print environment information'
+  task :print_env do
     on roles(:app) do
       within release_path do
-        execute :npm, 'run build'  # Build the NestJS project
+        execute :bash, '-c', '"source ~/.nvm/nvm.sh && node -v"'
+        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm -v"'
       end
     end
   end
 
-  after :npm_install, :build_nestjs
+  desc 'Clean and reinstall dependencies'
+  task :npm_clean_install do
+    on roles(:app) do
+      within release_path do
+        execute :rm, '-rf', 'node_modules'
+        execute :rm, '-rf', 'package-lock.json'
+        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm cache clean --force"'
+        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm install"'
+      end
+    end
+  end
 
-  # Start or reload the NestJS app with PM2
-  task :start_pm2 do
+  desc 'Build application'
+  task :build do
+    on roles(:app) do
+      within release_path do
+        execute :npm, 'run build'
+      end
+    end
+  end
+
+  desc 'Restart application'
+  task :restart_app do
     on roles(:app) do
       within release_path do
         execute :pm2, "delete #{fetch(:application)}"
         execute :pm2, "describe #{fetch(:application)} || pm2 start #{fetch(:pm2_config)} --name #{fetch(:application)}"
         execute :pm2, "reload #{fetch(:application)}"
+        execute :sudo, 'systemctl restart nginx'
       end
     end
   end
-
-  after :build_nestjs, :start_pm2
-
-  # Restart Nginx after deploying
-  task :restart_nginx do
-    on roles(:app) do
-      execute :sudo, 'systemctl restart nginx'
-    end
-  end
-
-  after :start_pm2, :restart_nginx
 end
+
+# Deploy hooks
+before 'deploy:updated', 'deploy:check_node_version'
+before 'deploy:updated', 'deploy:print_env'
+before 'deploy:updated', 'deploy:npm_clean_install'
+before 'deploy:updated', 'deploy:build'
+after 'deploy:published', 'deploy:restart_app'
