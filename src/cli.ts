@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import * as process from 'process';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TasksService } from './tasks/tasks.service';

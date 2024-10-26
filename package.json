@@ -6,7 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "echo 'Node version:' && node -v && echo 'NPM version:' && npm -v && echo 'Types directory:' && ls -la node_modules/@types || true",
     "build": "nest build",
+    "postbuild": "echo 'Build completed'",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -44,6 +46,7 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/mongoose": "^5.11.97",
+    "@types/mongoose-autopopulate": "^0.10.6",
     "@types/node": "^20.17.1",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
@@ -60,6 +63,10 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
+  },
+  "resolutions": {
+    "@types/node": "^20.17.1",
+    "@types/commander": "^2.12.0"
   },
   "jest": {
     "moduleFileExtensions": [
