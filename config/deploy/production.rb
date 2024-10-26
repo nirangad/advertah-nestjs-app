@@ -1,5 +1,5 @@
 # Define the server and user details for production
-server 'ec2-35-170-244-97.compute-1.amazonaws.com', user: 'ubuntu', roles: %w{app web}
+server '23.20.233.164', user: 'ubuntu', roles: %w{app web}
 
 # Set the branch to deploy from
 set :branch, 'main'  # Use the branch you want to deploy (e.g., 'main' or 'master')
