@@ -32,8 +32,8 @@ export class TasksController {
           const merchantConfig =
             await this.partnerConfigService.updateMerchantS3FilePath(
               s3FileName,
-              merchant,
               partner,
+              merchant,
             );
 
           if (!merchantConfig) {
