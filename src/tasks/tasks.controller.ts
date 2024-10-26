@@ -51,4 +51,30 @@ export class TasksController {
       message: {},
     };
   }
+
+  @Get('convert-data')
+  convertData(): APIResponse {
+    const connectionList = {
+      '25186': ['25189', '25181', '24921', '15502', '17760', '25701', '21839'],
+      awin_ltd: ['58637', '98661'],
+    };
+
+    for (const [partner, merchants] of Object.entries(connectionList)) {
+      console.log('Partner:', partner);
+      console.log('===========================================');
+      merchants.forEach(async (merchant) => {
+        console.log('Merchant:', merchant);
+        console.log('-------------------------------------------');
+        try {
+          await this.tasksService.convertData(partner, merchant);
+        } catch (error) {
+          console.error('Error while converting data:', error);
+        }
+      });
+    }
+    return {
+      status: HttpStatus.OK,
+      message: {},
+    };
+  }
 }
