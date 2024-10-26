@@ -40,7 +40,7 @@ append :linked_dirs, 'node_modules'
 # Default value for default_env is {}
 set :default_env, {
   NODE_ENV: 'production',
-  PATH: "$HOME/.nvm/versions/node/v20.17.0/bin:$PATH"
+  PATH: "$HOME/.nvm/versions/node/v20.18.0/bin:$PATH"
 }
 
 # Define NPM tasks
@@ -72,6 +72,7 @@ namespace :deploy do
         execute :rm, '-rf', 'package-lock.json'
         execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm cache clean --force"'
         execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm install"'
+        execute :bash, '-c', '"source ~/.nvm/nvm.sh && npm install @types/node @types/commander"'
       end
     end
   end

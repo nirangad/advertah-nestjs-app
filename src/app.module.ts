@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  MongooseModule,
-  MongooseModuleFactoryOptions,
-  MongooseModuleOptions,
-} from '@nestjs/mongoose';
+import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { CommandModule } from 'nestjs-command';
 
 import { AppController } from './app.controller';
@@ -21,11 +17,9 @@ import { TasksModule } from './tasks/tasks.module';
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (
-        configService: ConfigService,
-      ): Promise<MongooseModuleFactoryOptions> => {
+      useFactory: async (configService: ConfigService) => {
         const connectionString = `mongodb://${await configService.get('MONGODB_USERNAME')}:${await configService.get('MONGODB_PASSWORD')}@${await configService.get('MONGODB_SERVER')}:${await configService.get('MONGODB_PORT')}/${await configService.get('MONGODB_DATABASE')}`;
-        const options: MongooseModuleOptions = {
+        return {
           uri: connectionString,
           connectionFactory: (connection) => {
             connection.plugin((schema) => {
@@ -33,12 +27,7 @@ import { TasksModule } from './tasks/tasks.module';
             });
             return connection;
           },
-          // options: {
-          //   useNewUrlParser: true,
-          //   useUnifiedTopology: true,
-          // },
-        };
-        return options;
+        } as MongooseModuleOptions;
       },
       inject: [ConfigService],
     }),
