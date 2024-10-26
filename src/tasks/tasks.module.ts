@@ -21,6 +21,7 @@ import {
 } from 'src/data/models/schemas/partner.schema';
 import { PartnerService } from 'src/partners/partner.service';
 import { ProductService } from 'src/products/product.service';
+import { TasksController } from './tasks.controller';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ProductService } from 'src/products/product.service';
       { name: PartnerProductMapping.name, schema: PartnerProductMappingSchema },
     ]),
   ],
+  controllers: [TasksController],
   providers: [
     TasksService,
     TasksCommand,
