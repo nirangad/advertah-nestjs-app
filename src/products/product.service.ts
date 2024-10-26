@@ -146,12 +146,17 @@ export class ProductService {
     if (!productMapping) {
       throw new NotFoundException('Product Mapping not provided');
     }
+    let product: Product = null;
+    try {
+      product = await this.constructProduct(
+        csvDataRow,
+        productMapping,
+        merchantConfig,
+      );
+    } catch (e) {
+      console.error('Failed to construct the product', csvDataRow, e);
+    }
 
-    const product: Product = await this.constructProduct(
-      csvDataRow,
-      productMapping,
-      merchantConfig,
-    );
     return product;
   }
 
