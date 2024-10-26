@@ -76,9 +76,6 @@ export class ProductService {
       sortDirection = SortDirection.DESC,
     } = defaultParams;
 
-    console.log('Search Products params:');
-    console.log(defaultParams);
-
     const filter: any = {};
 
     // 1. Apply search query for productName, description, and gtin
