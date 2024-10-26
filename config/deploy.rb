@@ -18,7 +18,7 @@ set :pm2_config, -> { "#{release_path}/ecosystem.config.js" }
 
 set :npm_flags, '--production=false'
 
-set :nvm_node, 'v22.9.0'
+set :nvm_node, 'v20.18.0'
 set :nvm_map_bins, %w{node npm}
 
 # Define NPM tasks
