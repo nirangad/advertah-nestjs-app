@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ServeStaticModule } from '@nestjs/serve-static';
+// import { ServeStaticModule } from '@nestjs/serve-static';
 import { CommandModule } from 'nestjs-command';
 
 import { AppController } from './app.controller';
@@ -12,7 +12,7 @@ import { ProductsModule } from './products/products.module';
 import { PartnerModule } from './partners/partner.module';
 import { TasksModule } from './tasks/tasks.module';
 
-import { join } from 'path';
+// import { join } from 'path';
 
 @Module({
   providers: [AppService, ConfigService],
