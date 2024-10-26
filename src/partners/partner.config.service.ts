@@ -63,6 +63,7 @@ export class PartnerConfigurationService {
     merchantId: string,
     merchantConfigData: any,
   ): Promise<MerchantConfiguration> {
+    console.log('[PARTNER] :', partnerId);
     const partner = await this.partnerService.getPartner(partnerId);
     if (!partner) {
       throw new NotFoundException('Partner not found');
