@@ -90,10 +90,7 @@ namespace :deploy do
   task :restart_app do
     on roles(:app) do
       within release_path do
-        execute :pm2, "delete #{fetch(:application)}"
-        execute :pm2, "describe #{fetch(:application)} || pm2 start #{fetch(:pm2_config)} --name #{fetch(:application)}"
-        execute :pm2, "reload #{fetch(:application)}"
-        execute :sudo, 'systemctl restart nginx'
+        execute :sudo, 'systemctl restart advertah-api nginx'
       end
     end
   end
