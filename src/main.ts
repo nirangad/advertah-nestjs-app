@@ -7,7 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:4200'];
+      const allowedOrigins = [
+        'http://localhost:4200',
+        'https://ae.advertah.com',
+      ];
 
       // Allow requests with no origin (e.g., mobile apps, curl requests)
       if (!origin || allowedOrigins.includes(origin)) {
