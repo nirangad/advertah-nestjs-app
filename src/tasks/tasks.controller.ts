@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
 import { APIResponse } from 'src/app.types';
 import { TasksService } from './tasks.service';
 import { PartnerConfigurationService } from 'src/partners/partner.config.service';
@@ -53,24 +53,42 @@ export class TasksController {
   }
 
   @Get('convert-data')
-  convertData(): APIResponse {
+  async convertData(): Promise<APIResponse> {
     const connectionList = {
       '25186': ['25189', '25181', '24921', '15502', '17760', '25701', '21839'],
       awin_ltd: ['58637', '98661'],
     };
 
     for (const [partner, merchants] of Object.entries(connectionList)) {
-      console.log('Partner:', partner);
-      console.log('===========================================');
       merchants.forEach(async (merchant) => {
-        console.log('Merchant:', merchant);
-        console.log('-------------------------------------------');
+        console.log('Partner: ', partner, 'Merchant:', merchant);
         try {
           await this.tasksService.convertData(partner, merchant);
         } catch (error) {
           console.error('Error while converting data:', error);
         }
       });
+    }
+    return {
+      status: HttpStatus.OK,
+      message: {},
+    };
+  }
+
+  @Get('convert-data/:partnerId/:merchantId')
+  async convertDataForMerchant(
+    @Param('partnerId') partner: string,
+    @Param('merchantId') merchant: string,
+  ): Promise<APIResponse> {
+    console.log('Partner: ', partner, 'Merchant:', merchant);
+    try {
+      await this.tasksService.convertData(partner, merchant);
+    } catch (error) {
+      console.error('Error while converting data:', error);
+      return {
+        status: HttpStatus.OK,
+        message: {},
+      };
     }
     return {
       status: HttpStatus.OK,

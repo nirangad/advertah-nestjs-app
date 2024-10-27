@@ -183,8 +183,6 @@ export class ProductService {
     product.rawData = JSON.stringify(csvDataRow);
 
     const validationError = await product.validate();
-    console.log('Validation Status:');
-    console.log(validationError);
     if (validationError == undefined) {
       return product.save();
     }
