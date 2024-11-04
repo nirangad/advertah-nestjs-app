@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TasksService } from './tasks.service';
-import { TasksCommand } from './tasks.command';
+
 import { PartnerConfigurationService } from 'src/partners/partner.config.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from 'src/data/models/schemas/product.schema';
@@ -21,7 +20,11 @@ import {
 } from 'src/data/models/schemas/partner.schema';
 import { PartnerService } from 'src/partners/partner.service';
 import { ProductService } from 'src/products/product.service';
+
+import { TasksService } from './tasks.service';
+import { TasksCommand } from './tasks.command';
 import { TasksController } from './tasks.controller';
+import { TasksCron } from './tasks.cron';
 
 @Module({
   imports: [
@@ -39,6 +42,7 @@ import { TasksController } from './tasks.controller';
   providers: [
     TasksService,
     TasksCommand,
+    TasksCron,
     ProductService,
     PartnerService,
     PartnerConfigurationService,

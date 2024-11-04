@@ -8,14 +8,6 @@ export class TasksCommand {
 
   constructor(private readonly tasksService: TasksService) {}
 
-  // @Cron(CronExpression.EVERY_10_SECONDS)
-  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  // readPartnerProductDataFeedTask() {
-  //   this.logger.log('Reading Partner products feed...');
-  //   this.tasksService.readProductFeedFile();
-  //   this.logger.log('Reading Completed');
-  // }
-
   @Command({
     command: 'convert-data',
     describe: 'Manually trigger the data conversion process',
