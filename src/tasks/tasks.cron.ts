@@ -14,7 +14,8 @@ export class TasksCron {
     private readonly partnerService: PartnerService,
   ) {}
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron('0 25 16 ? * * *')
+  // @Cron(CronExpression.EVERY_30_SECONDS)
   // @Cron(CronExpression.EVERY_5_MINUTES)
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async readPartnerProductFeedCronJob() {
