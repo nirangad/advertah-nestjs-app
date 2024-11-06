@@ -107,7 +107,7 @@ export class TasksService {
     await this.readProductFeedFile(
       merchantConfig,
       async (row) => {
-        const product = await this.productService.createProductForCSVRecord(
+        const product = await this.productService.upsertProductForCSVRecord(
           row,
           productMapping,
           merchantConfig,

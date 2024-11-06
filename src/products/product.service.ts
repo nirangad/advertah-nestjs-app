@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, SortOrder, Types } from 'mongoose';
 
@@ -17,6 +17,7 @@ import { UtilityService } from 'src/utils/utility.service';
 
 @Injectable()
 export class ProductService {
+  private readonly logger = new Logger(ProductService.name);
   constructor(
     private readonly utilityService: UtilityService,
     @InjectModel(Product.name)
@@ -25,6 +26,10 @@ export class ProductService {
 
   getProducts() {
     return this.productModel.find().exec();
+  }
+
+  getProduct(productId: string) {
+    return this.productModel.findOne({ productId: productId }).exec();
   }
 
   async createProduct(product: Product) {
@@ -59,7 +64,6 @@ export class ProductService {
       products,
     };
   }
-
   async searchProductsQuery(params: ProductSearchParams) {
     let defaultParams: ProductSearchParams = this.defaultSearchParams();
     defaultParams = { ...defaultParams, ...params };
@@ -138,36 +142,86 @@ export class ProductService {
     };
   }
 
-  async createProductForCSVRecord(
+  async upsertProductForCSVRecord(
     csvDataRow: any,
     productMapping: PartnerProductMapping,
     merchantConfig: MerchantConfiguration,
   ) {
+    // Product Mapping Validation
     if (!productMapping) {
-      throw new NotFoundException('Product Mapping not provided');
+      this.logger.error('Product Mapping not provided');
+      return;
     }
-    let product: Product = null;
-    try {
-      product = await this.constructProduct(
+
+    // Product ID Validation
+    const productId = csvDataRow[productMapping.productId];
+    if (!productId) {
+      this.logger.error('Product ID does not exist the provided CSV row');
+      return;
+    }
+
+    const existingProduct = await this.getProduct(productId);
+    if (existingProduct) {
+      return await this.updateProductForCSVRecord(
+        csvDataRow,
+        productMapping,
+        productId,
+      );
+    } else {
+      return await this.createProductForCSVRecord(
         csvDataRow,
         productMapping,
         merchantConfig,
       );
-    } catch (e) {
-      console.error('Failed to construct the product', csvDataRow, e);
     }
-
-    return product;
   }
 
-  async constructProduct(
+  private async updateProductForCSVRecord(
+    csvDataRow: any,
+    productMapping: PartnerProductMapping,
+    productId: string,
+  ) {
+    // Preparing product data
+    let updateData: any;
+    ProductSchema.eachPath((field, fieldType) => {
+      if (field.startsWith('_') || field == 'merchant') {
+        return;
+      }
+      const csvField = productMapping[field];
+      const castedField = this.utilityService.typeCast(
+        csvDataRow[csvField],
+        fieldType.instance,
+      );
+
+      updateData[field] = castedField;
+    });
+
+    // Updating the product
+    try {
+      const product = await this.productModel.updateOne(
+        { productId: productId },
+        updateData,
+        {
+          runValidators: true,
+        },
+      );
+      return product;
+    } catch (e) {
+      this.logger.error(
+        '[Update Product from CSV]: Failed to save the new product',
+        e,
+      );
+    }
+  }
+
+  private async createProductForCSVRecord(
     csvDataRow,
     productMapping,
     merchantConfig,
   ): Promise<Product> {
     const product = new this.productModel();
     ProductSchema.eachPath((field, fieldType) => {
-      if (field.startsWith('_') || field === '__v') {
+      if (field.startsWith('_')) {
         return;
       }
       const csvField = productMapping[field];
@@ -182,11 +236,20 @@ export class ProductService {
     product.merchant = merchantConfig.merchant;
     product.rawData = JSON.stringify(csvDataRow);
 
-    const validationError = await product.validate();
-    if (validationError == undefined) {
-      return product.save();
+    try {
+      const validationError = await product.validate();
+      if (validationError == undefined) {
+        return product.save();
+      }
+      this.logger.error(
+        '[Create Product from CSV]: Failed to save the new product',
+      );
+    } catch (e) {
+      this.logger.error(
+        '[Create Product from CSV]: Failed to save the new product',
+        e,
+      );
     }
-    console.error('[Construct Product]: Failed to save the new product');
   }
 
   private defaultSearchParams(): ProductSearchParams {
