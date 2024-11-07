@@ -9,6 +9,13 @@ export class TasksCron {
   private readProductFeedCronJobMutex: boolean = false;
   private convertProductFeedCronJobMutex: boolean = false;
 
+  private readonly partnerList = [
+    ['25186', '25189', '25181', '24921', '15502', '17760', '25701', '21839'],
+    ['awin_ltd', '58637', '98661'],
+  ];
+  private partnerPointer: number = 0;
+  private merchantPointer: number = 1;
+
   constructor(
     private readonly tasksService: TasksService,
     private readonly partnerService: PartnerService,
@@ -99,6 +106,37 @@ export class TasksCron {
       );
     } finally {
       this.convertProductFeedCronJobMutex = false;
+    }
+  }
+
+  @Cron('0 */2 * * * *')
+  async updateFromSingleProductFeedCronJob() {
+    const partner = this.partnerList[this.partnerPointer][0];
+    const merchant =
+      this.partnerList[this.partnerPointer][this.merchantPointer];
+    try {
+      this.logger.log(`[Scheduled Update] Product Database`);
+      this.logger.log(`Merchant [${merchant}] of Partner [${partner}]`);
+      this.logger.log('Please wait...');
+      await this.tasksService.convertData(partner, merchant);
+      this.logger.log(
+        `Conversion Complete: Merchant [${merchant}] of Partner [${partner}]`,
+      );
+
+      // Update Pointers
+      this.merchantPointer += 1;
+      if (
+        this.merchantPointer == this.partnerList[this.partnerPointer].length
+      ) {
+        this.merchantPointer = 1;
+        this.partnerPointer += 1;
+        this.partnerPointer = this.partnerPointer % this.partnerList.length;
+      }
+      this.logger.log(
+        `Next Conversion: Partner Pointer [${this.partnerPointer}] | Merchant Pointer [${this.merchantPointer}]`,
+      );
+    } catch (error) {
+      this.logger.error('Error while converting data:', error);
     }
   }
 }
