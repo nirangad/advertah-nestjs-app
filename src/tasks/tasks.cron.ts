@@ -109,7 +109,7 @@ export class TasksCron {
     }
   }
 
-  @Cron('0 */2 * * * *')
+  // @Cron('0 */2 * * * *')
   async updateFromSingleProductFeedCronJob() {
     const partner = this.partnerList[this.partnerPointer][0];
     const merchant =
