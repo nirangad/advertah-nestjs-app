@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { APIResponse } from 'src/app.types';
 import { PartnerService } from './partner.service';
+import { Partner } from 'src/data/models/schemas/partner.schema';
 
 @Controller('partners')
 export class PartnerController {
@@ -38,10 +39,12 @@ export class PartnerController {
 
   @Post()
   async createPartner(@Body() partner: any): Promise<APIResponse> {
-    const newPartner = await this.partnerService.createPartner(partner);
+    let newPartner: Partner | string =
+      await this.partnerService.createPartner(partner);
     let status = HttpStatus.OK;
     if (!newPartner) {
       status = HttpStatus.BAD_REQUEST;
+      newPartner = 'Failed to create the partner';
     }
     return {
       status,

@@ -12,6 +12,10 @@ import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH } from 'src/constants';
+import {
+  PartnerConfiguration,
+  PartnerProductMapping,
+} from 'src/data/models/schemas/partner.config.schema';
 
 @Injectable()
 export class PartnerService {
@@ -20,6 +24,10 @@ export class PartnerService {
     private readonly configService: ConfigService,
     @InjectModel(Partner.name) private readonly partnerModel: Model<Partner>,
     @InjectModel(Merchant.name) private readonly merchantModel: Model<Merchant>,
+    @InjectModel(PartnerConfiguration.name)
+    private readonly partnerConfigModel: Model<PartnerConfiguration>,
+    @InjectModel(PartnerProductMapping.name)
+    private readonly partnerProductMapping: Model<PartnerProductMapping>,
   ) {}
 
   getPartner(partnerId: string): Promise<Partner> {
@@ -29,9 +37,26 @@ export class PartnerService {
       .exec();
   }
 
-  createPartner(partnerData: any): Promise<Partner> {
+  async createPartner(partnerData: any): Promise<Partner> {
+    const configData = partnerData.config;
+    if (!configData) {
+      return null;
+    }
+    delete partnerData['config'];
+
     const newPartner = new this.partnerModel(partnerData);
-    return newPartner.save();
+    await newPartner.save();
+
+    configData['partnerId'] = partnerData.partner_id;
+    configData['partner'] = newPartner._id;
+
+    const newConfig = new this.partnerConfigModel(configData);
+    newConfig.defaultProductMapping = new this.partnerProductMapping(
+      configData.defaultProductMapping,
+    );
+    await newConfig.save();
+
+    return newPartner;
   }
 
   updatePartner(partnerId: string, partnerData: any): Promise<Partner> {

@@ -22,14 +22,11 @@ export class PartnerConfigurationService {
   ) {}
 
   getAllConfigurations(): Promise<PartnerConfiguration[]> {
-    return this.partnerConfigModel.find().populate('merchantConfigs').exec();
+    return this.partnerConfigModel.find().exec();
   }
 
   async getConfiguration(partnerId: string): Promise<PartnerConfiguration> {
-    return this.partnerConfigModel
-      .findOne({ partnerId: partnerId })
-      .populate('merchantConfigs')
-      .exec();
+    return this.partnerConfigModel.findOne({ partnerId: partnerId }).exec();
   }
 
   async createConfiguration(configData: any): Promise<PartnerConfiguration> {
@@ -39,7 +36,6 @@ export class PartnerConfigurationService {
     }
 
     configData.partner = partner._id;
-    configData.partnerAlias = partner.name;
     configData.partnerId = partner.partner_id;
 
     const newConfig = new this.partnerConfigModel(configData);
@@ -53,7 +49,7 @@ export class PartnerConfigurationService {
     merchantId: string,
   ): Promise<MerchantConfiguration> {
     return this.merchantConfigModel
-      .findOne({ merchantAlias: merchantId })
+      .findOne({ merchantId: merchantId })
       .populate('merchant')
       .exec();
   }
@@ -79,11 +75,11 @@ export class PartnerConfigurationService {
 
     const config = await this.getConfiguration(partnerId);
     if (!config) {
-      throw new NotFoundException('Configuration not found');
+      throw new NotFoundException('Please create Partner Configuration first');
     }
 
     merchantConfigData.merchant = merchant._id;
-    merchantConfigData.merchantAlias = merchant.merchant_id;
+    merchantConfigData.merchantId = merchant.merchant_id;
 
     const newMerchantConfig = new this.merchantConfigModel(merchantConfigData);
     const createdMerchantConfig: MerchantConfiguration =
@@ -92,8 +88,6 @@ export class PartnerConfigurationService {
     if (!createdMerchantConfig) {
       throw new NotFoundException('Failed to create Merchant Configuration');
     }
-
-    config.merchantConfigs.push(createdMerchantConfig._id as Types.ObjectId);
     await config.save();
 
     return createdMerchantConfig.save();

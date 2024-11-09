@@ -74,7 +74,7 @@ export class MerchantConfiguration extends Document {
   merchant: Types.ObjectId;
 
   @Prop({ required: true, unique: true })
-  merchantAlias: string;
+  merchantId: string;
 
   @Prop({ required: true })
   s3FilePath: string;
@@ -101,16 +101,7 @@ export class PartnerConfiguration extends Document {
   partner: Types.ObjectId;
 
   @Prop({ required: true, unique: true })
-  partnerAlias: string;
-
-  @Prop({ required: true, unique: true })
   partnerId: string;
-
-  @Prop({
-    type: [Types.ObjectId],
-    ref: MerchantConfiguration.name,
-  })
-  merchantConfigs: Types.ObjectId[];
 
   @Prop({ type: PartnerProductMapping, _id: false })
   defaultProductMapping: PartnerProductMapping;

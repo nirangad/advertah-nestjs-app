@@ -3,7 +3,6 @@ import * as process from 'process';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TasksService } from './tasks/tasks.service';
-import { PartnerConfigurationService } from './partners/partner.config.service';
 // import mongoose from 'mongoose';
 
 async function bootstrap() {
@@ -13,7 +12,6 @@ async function bootstrap() {
 
   // Services
   const tasksService = app.get(TasksService);
-  const partnerConfigService = app.get(PartnerConfigurationService);
 
   // Initialize commander
   const program = new Command();
@@ -50,16 +48,6 @@ async function bootstrap() {
           merchant,
         );
 
-        const merchantConfig =
-          await partnerConfigService.updateMerchantS3FilePath(
-            s3FileName,
-            partner,
-            merchant,
-          );
-
-        if (!merchantConfig) {
-          console.error('Updating Merchant product feed file path failed');
-        }
         console.log('Uploaded file: ', s3FileName);
       } catch (error) {
         console.error('Error while fetching data:', error);
