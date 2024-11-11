@@ -1,5 +1,6 @@
 export const AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH = 'product_feeds/partners';
-
+export const PARAM_KEY = 'key';
+export const PARAM_VALUE = 'value';
 // npx nestjs-command fetch-data -p 25186 -m 25189
 // npx nestjs-command fetch-data -p 25186 -m 25181
 // npx nestjs-command fetch-data -p 25186 -m 24921

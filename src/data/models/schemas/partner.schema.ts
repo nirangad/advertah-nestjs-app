@@ -40,6 +40,15 @@ export class ProductFeed extends Document {
   params: ProductFeedParam[];
 
   @Prop({
+    type: {
+      data: { type: String, required: true },
+      delimiter: { type: String, required: true },
+    },
+    required: true,
+  })
+  paramMap: { data: string; delimiter: string };
+
+  @Prop({
     type: String,
     required: true,
     enum: Object.values(ProductFeedFormat),

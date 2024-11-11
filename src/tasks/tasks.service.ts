@@ -80,9 +80,7 @@ export class TasksService {
         partnerId,
         merchantId,
       );
-    const s3FilePathString =
-      s3FilePath instanceof Promise ? await s3FilePath : s3FilePath;
-    return await this.utilityService.streamFileToS3(feedURL, s3FilePathString);
+    return await this.utilityService.streamFileToS3(feedURL, s3FilePath);
   }
 
   async convertData(partnerId: string, merchantId: string) {

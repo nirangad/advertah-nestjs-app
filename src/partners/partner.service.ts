@@ -5,13 +5,16 @@ import { UtilityService } from 'src/utils/utility.service';
 import {
   Merchant,
   Partner,
-  PartnerAPI,
   ProductFeedFormat,
 } from 'src/data/models/schemas/partner.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH } from 'src/constants';
+import {
+  AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH,
+  PARAM_KEY,
+  PARAM_VALUE,
+} from 'src/constants';
 import {
   PartnerConfiguration,
   PartnerProductMapping,
@@ -163,7 +166,7 @@ export class PartnerService {
     }
 
     return {
-      feedURL: merchant.productFeed.rawURL,
+      feedURL: this.generateFeedURL(merchant.productFeed),
       s3FilePath: this.generateS3FileName(
         partner,
         merchant,
@@ -172,17 +175,7 @@ export class PartnerService {
     };
   }
 
-  generatePartnerAPILink(params: PartnerAPI): { usage: string; url: string } {
-    const queryParams = this.utilityService.objectToKeyValueString(
-      params.query,
-    );
-    return {
-      usage: params.usage,
-      url: `${params.scheme}://${params.host}${params.filename}?${queryParams.join('&')}`,
-    };
-  }
-
-  async generateS3FileName(
+  generateS3FileName(
     partner: Partner,
     merchant: Merchant,
     format: ProductFeedFormat,
@@ -191,5 +184,14 @@ export class PartnerService {
       ' ',
       '-',
     );
+  }
+
+  generateFeedURL(productFeed, raw = true) {
+    if (raw) {
+      return productFeed.rawURL;
+    }
+
+    const { data: pattern, delimiter } = productFeed.paramMap;
+    return `${productFeed}${productFeed.params.map((p) => pattern.replace(PARAM_KEY, p.param).replace(PARAM_VALUE, p.default).join(delimiter))}`;
   }
 }
