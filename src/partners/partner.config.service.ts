@@ -54,66 +54,46 @@ export class PartnerConfigurationService {
       .exec();
   }
 
-  async createMerchantConfiguration(
-    partnerId: string,
-    merchantId: string,
-    merchantConfigData: any,
-  ): Promise<MerchantConfiguration> {
-    console.log('[PARTNER] :', partnerId);
-    const partner = await this.partnerService.getPartner(partnerId);
-    if (!partner) {
-      throw new NotFoundException('Partner not found');
-    }
+  // async createMerchantConfiguration(
+  //   partnerId: string,
+  //   merchantId: string,
+  //   merchantConfigData: any,
+  // ): Promise<MerchantConfiguration> {
+  //   console.log('[PARTNER] :', partnerId);
+  //   const partner = await this.partnerService.getPartner(partnerId);
+  //   if (!partner) {
+  //     throw new NotFoundException('Partner not found');
+  //   }
 
-    const merchant = await this.partnerService.getMerchant(
-      partnerId,
-      merchantId,
-    );
-    if (!merchant) {
-      throw new NotFoundException('Merchant not found');
-    }
+  //   const merchant = await this.partnerService.getMerchant(
+  //     partnerId,
+  //     merchantId,
+  //   );
+  //   if (!merchant) {
+  //     throw new NotFoundException('Merchant not found');
+  //   }
 
-    const config = await this.getConfiguration(partnerId);
-    if (!config) {
-      throw new NotFoundException('Please create Partner Configuration first');
-    }
+  //   const config = await this.getConfiguration(partnerId);
+  //   if (!config) {
+  //     throw new NotFoundException('Please create Partner Configuration first');
+  //   }
 
-    merchantConfigData.merchant = merchant._id;
-    merchantConfigData.merchantId = merchant.merchant_id;
+  //   merchantConfigData.merchant = merchant._id;
+  //   merchantConfigData.merchantId = merchant.merchant_id;
 
-    const newMerchantConfig = new this.merchantConfigModel(merchantConfigData);
-    const createdMerchantConfig: MerchantConfiguration =
-      await newMerchantConfig.save();
+  //   const newMerchantConfig = new this.merchantConfigModel(merchantConfigData);
+  //   const createdMerchantConfig: MerchantConfiguration =
+  //     await newMerchantConfig.save();
 
-    if (!createdMerchantConfig) {
-      throw new NotFoundException('Failed to create Merchant Configuration');
-    }
-    await config.save();
+  //   if (!createdMerchantConfig) {
+  //     throw new NotFoundException('Failed to create Merchant Configuration');
+  //   }
+  //   await config.save();
 
-    return createdMerchantConfig.save();
-  }
+  //   return createdMerchantConfig.save();
+  // }
 
   async deleteConfiguration(partnerId: string): Promise<DeleteResult> {
     return this.partnerConfigModel.deleteOne({ partnerId: partnerId });
-  }
-
-  async updateMerchantS3FilePath(
-    s3FilePath: string,
-    partnerId: string,
-    merchantId: string,
-  ) {
-    const merchantConfig = await this.getMerchantConfiguration(merchantId);
-    if (!merchantConfig) {
-      console.warn(
-        'Merchant Configurations not found. Creating new configurations..',
-      );
-      return this.createMerchantConfiguration(partnerId, merchantId, {
-        merchantId: merchantId,
-        s3FilePath: s3FilePath,
-      });
-    } else {
-      merchantConfig.s3FilePath = s3FilePath;
-      return merchantConfig.save();
-    }
   }
 }

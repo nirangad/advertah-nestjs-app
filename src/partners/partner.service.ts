@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { APIResponse } from '../app.types';
 import { PartnerSearchParams } from './partner.types';
 import { UtilityService } from 'src/utils/utility.service';
@@ -22,6 +27,7 @@ import {
 
 @Injectable()
 export class PartnerService {
+  private readonly logger = new Logger(PartnerService.name);
   constructor(
     private readonly utilityService: UtilityService,
     private readonly configService: ConfigService,
@@ -165,7 +171,7 @@ export class PartnerService {
       throw new NotFoundException('Partner/Merchant not found');
     }
 
-    return {
+    const response = {
       feedURL: this.generateFeedURL(merchant.productFeed),
       s3FilePath: this.generateS3FileName(
         partner,
@@ -173,6 +179,12 @@ export class PartnerService {
         merchant.productFeed.format,
       ),
     };
+    this.logger.debug(response);
+
+    merchant.s3FilePath = response.s3FilePath;
+    merchant.save();
+
+    return response;
   }
 
   generateS3FileName(

@@ -9,11 +9,9 @@ import {
   SortDirection,
 } from './products.types';
 import { Product, ProductSchema } from '../data/models/schemas/product.schema';
-import {
-  MerchantConfiguration,
-  PartnerProductMapping,
-} from 'src/data/models/schemas/partner.config.schema';
+import { PartnerProductMapping } from 'src/data/models/schemas/partner.config.schema';
 import { UtilityService } from 'src/utils/utility.service';
+import { Merchant } from 'src/data/models/schemas/partner.schema';
 
 @Injectable()
 export class ProductService {
@@ -145,7 +143,7 @@ export class ProductService {
   async upsertProductForCSVRecord(
     csvDataRow: any,
     productMapping: PartnerProductMapping,
-    merchantConfig: MerchantConfiguration,
+    merchant: Merchant,
   ) {
     // Product Mapping Validation
     if (!productMapping) {
@@ -156,22 +154,29 @@ export class ProductService {
     // Product ID Validation
     const productId = csvDataRow[productMapping.productId];
     if (!productId) {
-      this.logger.error('Product ID does not exist the provided CSV row');
+      this.logger.error(
+        'Mandatory Field Missing: Product ID does not exist the provided CSV row',
+      );
       return;
     }
 
     const existingProduct = await this.getProduct(productId);
     if (existingProduct) {
+      this.logger.log(
+        'Updating Existing Product: ',
+        existingProduct.productName,
+      );
       return await this.updateProductForCSVRecord(
         csvDataRow,
         productMapping,
         productId,
       );
     } else {
+      this.logger.log('Creating New Product: ');
       return await this.createProductForCSVRecord(
         csvDataRow,
         productMapping,
-        merchantConfig,
+        merchant,
       );
     }
   }
@@ -217,7 +222,7 @@ export class ProductService {
   private async createProductForCSVRecord(
     csvDataRow,
     productMapping,
-    merchantConfig,
+    merchant,
   ): Promise<Product> {
     const product = new this.productModel();
     ProductSchema.eachPath((field, fieldType) => {
@@ -233,7 +238,7 @@ export class ProductService {
       product[field] = castedField;
     });
 
-    product.merchant = merchantConfig.merchant;
+    product.merchant = merchant;
     product.rawData = JSON.stringify(csvDataRow);
 
     try {

@@ -99,18 +99,18 @@ export class UtilityService {
 
       const csvStream = fastCSV
         .parse({ headers: true, delimiter: delimiter })
-        .on('data', (row) => {
-          callbackRead(row);
+        .on('data', async (row) => {
+          await callbackRead(row);
         })
-        .on('end', (rowCount: number) => {
-          callbackComplete(rowCount);
+        .on('end', async (rowCount: number) => {
+          await callbackComplete(rowCount);
         })
         .on('error', (error) => {
           console.error('Error while reading CSV file:', error);
           throw error;
         });
 
-      fileStream.pipe(csvStream);
+      return await fileStream.pipe(csvStream);
     } catch (error) {
       console.error(
         'Something went wrong while streaming CSV file',

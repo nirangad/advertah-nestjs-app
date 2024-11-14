@@ -124,6 +124,9 @@ export class Merchant extends Document {
     required: true,
   })
   definitions: ProductFeedDefinition[];
+
+  @Prop()
+  s3FilePath: string;
 }
 
 export const MerchantSchema = SchemaFactory.createForClass(Merchant);

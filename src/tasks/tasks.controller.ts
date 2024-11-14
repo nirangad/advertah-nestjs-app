@@ -10,7 +10,7 @@ export class TasksController {
     private readonly partnerConfigService: PartnerConfigurationService,
   ) {}
 
-  @Get('fetch-data')
+  // @Get('fetch-data')
   fetchData(): APIResponse {
     const connectionList = {
       '25186': ['25189', '25181', '24921', '15502', '17760', '25701', '21839'],
@@ -24,21 +24,11 @@ export class TasksController {
         console.log('Merchant:', merchant);
         console.log('-------------------------------------------');
         try {
-          const s3FileName = await this.tasksService.downloadProductFeeds(
+          const s3FileName = await this.tasksService.downloadProductFeed(
             partner,
             merchant,
           );
 
-          const merchantConfig =
-            await this.partnerConfigService.updateMerchantS3FilePath(
-              s3FileName,
-              partner,
-              merchant,
-            );
-
-          if (!merchantConfig) {
-            console.error('Updating Merchant product feed file path failed');
-          }
           console.log('Uploaded file: ', s3FileName);
         } catch (error) {
           console.error('Partner: ', partner, 'Merchant: ', merchant);
@@ -52,7 +42,7 @@ export class TasksController {
     };
   }
 
-  @Get('convert-data')
+  // @Get('convert-data')
   async convertData(): Promise<APIResponse> {
     const connectionList = {
       '25186': ['25189', '25181', '24921', '15502', '17760', '25701', '21839'],

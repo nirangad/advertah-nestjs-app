@@ -43,7 +43,7 @@ async function bootstrap() {
       console.log('Please wait...');
 
       try {
-        const s3FileName = await tasksService.downloadProductFeeds(
+        const s3FileName = await tasksService.downloadProductFeed(
           partner,
           merchant,
         );
@@ -84,12 +84,13 @@ async function bootstrap() {
       );
 
       try {
+        console.warn('Entering convert-data try block...');
         await tasksService.convertData(partner, merchant);
+        console.warn('Exiting convert-data try block...');
+        await app.close();
       } catch (error) {
         console.error('Error while converting data:', error);
         process.exit(1);
-      } finally {
-        //await app.close();
       }
     });
 

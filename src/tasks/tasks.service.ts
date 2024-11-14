@@ -30,24 +30,19 @@ export class TasksService {
       throw new NotFoundException('Partner configurations are not available');
     }
 
-    const merchantConfig =
-      await this.partnerConfigurationService.getMerchantConfiguration(
-        merchantId,
-      );
-
-    if (!merchantConfig) {
-      this.logger.error('Merchant configurations are not available');
-      throw new NotFoundException('Merchant configurations are not available');
-    }
+    const merchant = await this.partnerService.getMerchant(
+      partnerId,
+      merchantId,
+    );
 
     const fileExists = await this.utilityService.checkS3FileExists(
-      merchantConfig.s3FilePath,
+      merchant.s3FilePath,
     );
 
     if (!fileExists) {
       this.logger.error(
         'Product feed file does not exists for merchant: ',
-        merchantConfig.s3FilePath,
+        merchant.s3FilePath,
       );
       throw new NotFoundException(
         'Product feed file does not exists for merchant',
@@ -56,25 +51,26 @@ export class TasksService {
 
     return {
       partnerConfig,
-      merchantConfig,
+      merchant,
       fileExists,
     };
   }
 
   async readProductFeedFile(
-    merchantConfig: MerchantConfiguration,
+    s3FilePath: string,
+    delimiter: string,
     callbackRead: (data: any) => void,
     callbackComplete: (data: any) => void,
   ) {
-    this.utilityService.loadCSVFromS3(
-      merchantConfig.s3FilePath,
-      merchantConfig.delimiter,
+    return await this.utilityService.loadCSVFromS3(
+      s3FilePath,
+      delimiter,
       callbackRead,
       callbackComplete,
     );
   }
 
-  async downloadProductFeeds(partnerId: string, merchantId: string) {
+  async downloadProductFeed(partnerId: string, merchantId: string) {
     const { feedURL, s3FilePath } =
       await this.partnerService.getMerchantProductFeedURL(
         partnerId,
@@ -89,11 +85,13 @@ export class TasksService {
       throw new NotFoundException('Merchant ID is not provided');
     }
 
-    const { partnerConfig, merchantConfig } =
-      await this.configForProductFeedS3File(partnerId, merchantId);
+    const { partnerConfig, merchant } = await this.configForProductFeedS3File(
+      partnerId,
+      merchantId,
+    );
 
     const productMapping: PartnerProductMapping =
-      merchantConfig.productMapping || partnerConfig.defaultProductMapping;
+      partnerConfig.defaultProductMapping;
 
     if (!productMapping) {
       const errorMessage =
@@ -102,21 +100,21 @@ export class TasksService {
       throw new NotFoundException(errorMessage);
     }
 
-    await this.readProductFeedFile(
-      merchantConfig,
+    return await this.readProductFeedFile(
+      merchant.s3FilePath,
+      partnerConfig.defaultDelimiter,
       async (row) => {
-        const product = await this.productService.upsertProductForCSVRecord(
+        await this.productService.upsertProductForCSVRecord(
           row,
           productMapping,
-          merchantConfig,
+          merchant,
         );
-        this.logger.debug('convertData: [Product]', product);
       },
       (rowCount) => {
-        this.logger.debug(
-          'Streaming CSV file from S3 successfully completed.',
-          rowCount,
-          'records read',
+        this.logger.log(
+          'Streaming CSV file from S3 successfully completed. ' +
+            rowCount +
+            ' records read',
         );
       },
     );

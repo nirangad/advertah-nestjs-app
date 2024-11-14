@@ -24,6 +24,7 @@ export class TasksCron {
   // @Cron(CronExpression.EVERY_30_SECONDS)
   // @Cron(CronExpression.EVERY_5_MINUTES)
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron('35 18 * * *')
   async readPartnerProductFeedCronJob() {
     if (this.readProductFeedCronJobMutex) {
       this.logger.warn(
@@ -31,6 +32,7 @@ export class TasksCron {
       );
       return;
     }
+    console.time('CRON [readPartnerProductFeedCronJob]');
     this.readProductFeedCronJobMutex = true;
     const partners = await this.partnerService.getAllPartners();
     try {
@@ -43,23 +45,19 @@ export class TasksCron {
               `Merchant [${merchant.merchant_id} | ${merchant.name}] of Partner [ ${partner.partner_id} | ${partner.name} ]`,
             );
             this.logger.log('Please wait...');
-            const s3FileName = await this.tasksService.downloadProductFeeds(
+            const s3FileName = await this.tasksService.downloadProductFeed(
               partner.partner_id,
               merchant.merchant_id,
             );
             this.logger.log('Uploaded file: ', s3FileName);
-
-            this.logger.log(`[Scheduled Update] Update Product Database`);
-            this.logger.log(
-              `Merchant [${merchant.merchant_id} | ${merchant.name}] of Partner [ ${partner.partner_id} | ${partner.name} ]`,
-            );
-            this.logger.log('Please wait...');
-            await this.tasksService.convertData(partner.partner_id, merchant);
           } catch (error) {
             this.logger.error('Error while fetching data:', error);
           }
         }
       }
+      this.readProductFeedCronJobMutex = false;
+      console.timeEnd('CRON [readPartnerProductFeedCronJob]');
+      await this.updateFromProductFeedCronJob(partners);
     } catch (error) {
       this.logger.error(
         'Error while fetching data. Exiting the Cron Job',
@@ -70,8 +68,9 @@ export class TasksCron {
     }
   }
 
-  // @Cron(CronExpression.EVERY_10_SECONDS)
-  async updateFromProductFeedCronJob(partners) {
+  // @Cron(CronExpression.EVERY_10_SECONDS) // 40 17 * * *
+  // @Cron('53 17 * * *')
+  async updateFromProductFeedCronJob(partners = []) {
     if (
       this.readProductFeedCronJobMutex ||
       this.convertProductFeedCronJobMutex
@@ -81,6 +80,11 @@ export class TasksCron {
       );
       return;
     }
+    if (partners.length == 0) {
+      partners = await this.partnerService.getAllPartners();
+    }
+
+    console.time('CRON [updateFromProductFeedCronJob]');
     this.convertProductFeedCronJobMutex = true;
 
     try {
@@ -93,12 +97,17 @@ export class TasksCron {
               `Merchant [${merchant.merchant_id} | ${merchant.name}] of Partner [ ${partner.partner_id} | ${partner.name} ]`,
             );
             this.logger.log('Please wait...');
-            await this.tasksService.convertData(partner, merchant);
+            await this.tasksService.convertData(
+              partner.partner_id,
+              merchant.merchant_id,
+            );
           } catch (error) {
             this.logger.error('Error while converting data:', error);
           }
         }
       }
+      this.convertProductFeedCronJobMutex = false;
+      console.timeEnd('CRON [updateFromProductFeedCronJob]');
     } catch (error) {
       this.logger.error(
         'Error while converting data. Exiting the Cron Job',

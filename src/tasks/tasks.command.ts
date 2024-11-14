@@ -74,7 +74,7 @@ export class TasksCommand {
         ']',
       );
       console.log('Please wait...');
-      const s3FileName = await this.tasksService.downloadProductFeeds(
+      const s3FileName = await this.tasksService.downloadProductFeed(
         partner,
         merchant,
       );
