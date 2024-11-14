@@ -187,7 +187,7 @@ export class ProductService {
     productId: string,
   ) {
     // Preparing product data
-    let updateData: any;
+    const updateData: any = {};
     ProductSchema.eachPath((field, fieldType) => {
       if (field.startsWith('_') || field == 'merchant') {
         return;
