@@ -24,8 +24,7 @@ export class TasksCron {
   // @Cron(CronExpression.EVERY_30_SECONDS)
   // @Cron(CronExpression.EVERY_5_MINUTES)
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  // @Cron('30 21 * * *')
-  @Cron('25 18 * * *')
+  @Cron('30 21 * * *')
   async readPartnerProductFeedCronJob() {
     if (this.readProductFeedCronJobMutex) {
       this.logger.warn(
