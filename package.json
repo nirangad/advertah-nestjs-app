@@ -8,6 +8,7 @@
   "scripts": {
     "prebuild": "echo 'Node version:' && node -v && echo 'NPM version:' && npm -v && echo 'Types directory:' && ls -la node_modules/@types || true",
     "build": "nest build",
+    "deploy": "git checkout main && cap production deploy",
     "postbuild": "echo 'Build completed'",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
