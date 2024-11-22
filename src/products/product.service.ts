@@ -74,8 +74,8 @@ export class ProductService {
       merchant = undefined,
       currentPage = 1,
       itemsPerPage = PER_PAGE,
-      sortBy = ProductSortable.UPDATED_AT,
-      sortDirection = SortDirection.DESC,
+      sortBy = ProductSortable.PRODUCT_NAME,
+      sortDirection = SortDirection.ASC,
     } = defaultParams;
 
     const filter: any = {};
@@ -98,9 +98,10 @@ export class ProductService {
       filter.shippingCost = 0;
     }
 
-    if (merchant && Types.ObjectId.isValid(merchant)) {
-      filter.merchant = new Types.ObjectId(merchant);
-    }
+    // Disabling Merchant filter for future use
+    // if (merchant && Types.ObjectId.isValid(merchant)) {
+    //   filter.merchant = new Types.ObjectId(merchant);
+    // }
 
     // 3. Filter by price range (minPrice and maxPrice)
     const minPriceNumber = parseFloat(`${minPrice}`);
