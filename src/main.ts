@@ -9,7 +9,7 @@ async function bootstrap() {
     origin: (origin, callback) => {
       const allowedOrigins = [
         'http://localhost:4200',
-        'https://ae.advertah.com',
+        'https://*.advertah.com',
       ];
 
       // Allow requests with no origin (e.g., mobile apps, curl requests)

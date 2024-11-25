@@ -71,7 +71,6 @@ export class ProductService {
       freeShipping = false,
       minPrice = undefined,
       maxPrice = undefined,
-      merchant = undefined,
       currentPage = 1,
       itemsPerPage = PER_PAGE,
       sortBy = ProductSortable.PRODUCT_NAME,
