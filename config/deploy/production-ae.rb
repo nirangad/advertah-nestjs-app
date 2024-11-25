@@ -1,5 +1,5 @@
 # Define the server and user details for production
-server '23.20.233.164', user: 'ubuntu', roles: %w{app web}
+server 'app.advertah.com', user: 'ubuntu', roles: %w{app web}
 
 # Set the branch to deploy from
 set :branch, 'main'  # Use the branch you want to deploy (e.g., 'main' or 'master')
