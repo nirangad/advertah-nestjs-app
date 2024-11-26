@@ -39,7 +39,6 @@ append :linked_dirs, 'node_modules'
 
 # Default value for default_env is {}
 set :default_env, {
-  NODE_ENV: 'production',
   PATH: "$HOME/.nvm/versions/node/v20.18.0/bin:$PATH"
 }
 
@@ -78,6 +77,7 @@ namespace :deploy do
   task :build do
     on roles(:app) do
       within release_path do
+        info "Building app in #{release_path}"
         node_env = fetch(:node_env, 'production')
         execute "NODE_ENV=#{node_env} npm run build"
       end

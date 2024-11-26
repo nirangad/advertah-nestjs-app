@@ -14,6 +14,4 @@ set :ssh_options, {
 }
 
 # Optional: Set the environment (useful if you want to set NODE_ENV for example)
-set :default_env, {
-  'NODE_ENV' => 'production-us'
-}
+set :node_env, 'production-us'
