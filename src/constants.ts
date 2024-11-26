@@ -1,12 +1,10 @@
-import { environment } from './environments/environment';
-
 export const AWS_S3_ADVERTAH_PRODUCT_FEEDS_PATH = 'product_feeds/partners';
 export const PARAM_KEY = 'key';
 export const PARAM_VALUE = 'value';
 
 export const CONSTANTS = (() => {
-  console.log('Environment: ', environment.envName);
-  switch (environment.envName) {
+  console.log('Environment: ', process.env.NODE_ENV);
+  switch (process.env.NODE_ENV) {
     case 'production-ae':
       return {
         port: '3040',

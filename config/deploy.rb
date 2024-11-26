@@ -79,7 +79,7 @@ namespace :deploy do
       within release_path do
         info "Building app in #{release_path}"
         node_env = fetch(:node_env, 'production')
-        execute "NODE_ENV=#{node_env} npm run build"
+        execute "cd #{release_path} && NODE_ENV=#{node_env} npm run build"
       end
     end
   end
