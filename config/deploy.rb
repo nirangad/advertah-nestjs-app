@@ -87,7 +87,7 @@ namespace :deploy do
   task :restart_app do
     on roles(:app) do
       within release_path do
-        execute :sudo, 'systemctl restart advertah-api nginx'
+        execute :sudo, 'systemctl restart advertah-api-ae advertah-api-uk advertah-api-us nginx'
       end
     end
   end

@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { CONSTANTS } from './constants';
 // import mongoose from 'mongoose';
 
 async function bootstrap() {
@@ -24,7 +25,8 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  await app.listen(3030);
+
+  await app.listen(CONSTANTS.port);
 }
 
 bootstrap();
