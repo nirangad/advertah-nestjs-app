@@ -78,7 +78,8 @@ namespace :deploy do
   task :build do
     on roles(:app) do
       within release_path do
-        execute :npm, 'run build'
+        node_env = fetch(:node_env, 'production')
+        execute "NODE_ENV=#{node_env} npm run build"
       end
     end
   end
