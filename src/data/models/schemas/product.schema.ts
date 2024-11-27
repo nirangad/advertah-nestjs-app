@@ -35,7 +35,7 @@ export class Product extends Document {
   @Prop()
   image: string;
 
-  @Prop({ unique: true, sparse: true })
+  @Prop()
   url: string;
 
   @Prop()
