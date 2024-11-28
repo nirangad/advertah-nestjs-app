@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, SortOrder, Types } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 
 import {
   PER_PAGE,
@@ -12,6 +12,7 @@ import { Product, ProductSchema } from '../data/models/schemas/product.schema';
 import { PartnerProductMapping } from 'src/data/models/schemas/partner.config.schema';
 import { UtilityService } from 'src/utils/utility.service';
 import { Merchant } from 'src/data/models/schemas/partner.schema';
+import { CONSTANTS } from 'src/constants';
 
 @Injectable()
 export class ProductService {
@@ -187,7 +188,7 @@ export class ProductService {
     productId: string,
   ) {
     // Preparing product data
-    const updateData: any = {};
+    let updateData: any = {};
     ProductSchema.eachPath((field, fieldType) => {
       if (field.startsWith('_') || field == 'merchant') {
         return;
@@ -200,6 +201,8 @@ export class ProductService {
 
       updateData[field] = castedField;
     });
+
+    updateData = this.currencyConverter(updateData);
 
     // Updating the product
     try {
@@ -224,7 +227,7 @@ export class ProductService {
     productMapping,
     merchant,
   ): Promise<Product> {
-    const product = new this.productModel();
+    let product = new this.productModel();
     ProductSchema.eachPath((field, fieldType) => {
       if (field.startsWith('_')) {
         return;
@@ -240,6 +243,7 @@ export class ProductService {
 
     product.merchant = merchant;
     product.rawData = JSON.stringify(csvDataRow);
+    product = this.currencyConverter(product);
 
     try {
       const validationError = await product.validate();
@@ -271,5 +275,21 @@ export class ProductService {
       sortBy: ProductSortable.UPDATED_AT,
       sortDirection: SortDirection.ASC,
     };
+  }
+
+  private currencyConverter(product) {
+    const current_currency = CONSTANTS.currency;
+    const conversion_rates = CONSTANTS.conversion_rates;
+    const product_currency = product.currency;
+
+    if (current_currency == product_currency) {
+      return product;
+    }
+
+    product.price *= conversion_rates[product_currency];
+    product.oldPrice *= conversion_rates[product_currency];
+    product.shippingCost *= conversion_rates[product_currency];
+    product.currency = current_currency;
+    return product;
   }
 }

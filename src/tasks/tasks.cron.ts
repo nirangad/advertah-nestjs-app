@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { PartnerService } from 'src/partners/partner.service';
 
 @Injectable()
@@ -24,8 +24,7 @@ export class TasksCron {
   // @Cron(CronExpression.EVERY_30_SECONDS)
   // @Cron(CronExpression.EVERY_5_MINUTES)
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  // @Cron('30 21 * * *')
-  @Cron('06 16 * * *')
+  @Cron('30 21 * * *')
   async readPartnerProductFeedCronJob() {
     if (this.readProductFeedCronJobMutex) {
       this.logger.warn(
