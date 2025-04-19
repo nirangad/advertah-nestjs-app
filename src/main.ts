@@ -13,6 +13,7 @@ async function bootstrap() {
         'https://ae.advertah.com',
         'https://us.advertah.com',
         'https://uk.advertah.com',
+        'https://sg.advertah.com',
         'app.advertah.com',
       ];
 
