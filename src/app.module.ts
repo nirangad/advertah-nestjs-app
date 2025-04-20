@@ -18,7 +18,24 @@ import { TasksModule } from './tasks/tasks.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        const connectionString = `mongodb://${await configService.get('MONGODB_USERNAME')}:${await configService.get('MONGODB_PASSWORD')}@${await configService.get('MONGODB_SERVER')}:${await configService.get('MONGODB_PORT')}/${await configService.get('MONGODB_DATABASE')}`;
+        const mUser = await configService.get('MONGODB_USERNAME');
+        const mPass = await configService.get('MONGODB_PASSWORD');
+        const mServer = await configService.get('MONGODB_SERVER');
+        const mPort = await configService.get('MONGODB_PORT');
+        const mDatabase = await configService.get('MONGODB_DATABASE');
+        const connectionString = `mongodb://${mUser}:${mPass}@${mServer}:${mPort}/${mDatabase}`;
+
+        console.log('MongoDB Connection Details:');
+        console.log('Username:', mUser);
+        console.log('Password:', mPass);
+        console.log('Server:', mServer);
+        console.log('Port:', mPort);
+        console.log('Database:', mDatabase);
+        console.log(
+          'Connection String:',
+          `mongodb://${mUser}:${mPass}@${mServer}:${mPort}/${mDatabase}`,
+        );
+
         return {
           uri: connectionString,
           connectionFactory: (connection) => {
