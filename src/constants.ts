@@ -55,7 +55,7 @@ export const CONSTANTS = (() => {
       };
     default:
       return {
-        port: '3030',
+        port: '3000',
         currency: 'AED',
         conversion_rates: {
           AED: 1,

@@ -70,6 +70,80 @@ Check out a few resources that may come in handy when working with NestJS:
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
+## API Endpoints
+
+The API provides the following REST endpoints:
+
+### Base URL
+
+The API is accessible at the root URL of your deployment.
+
+### Endpoints
+
+#### App Controller
+
+- `GET /` - Returns a welcome greeting
+
+#### Partners Controller (`/partners`)
+
+- `GET /partners` - Get all partners
+- `GET /partners/:id` - Get a specific partner by ID
+- `POST /partners` - Create a new partner
+- `PUT /partners/:id` - Update a partner
+- `GET /partners/:id/merchants` - Get all merchants for a partner
+- `GET /partners/:id/merchants/:merchant_id` - Get a specific merchant for a partner
+- `POST /partners/:id/merchants` - Create a new merchant for a partner
+- `PUT /partners/:id/merchants/:merchant_id` - Update a merchant for a partner
+
+#### Partner Configuration Controller (`/config/partners`)
+
+- `GET /config/partners` - Get all partner configurations
+- `GET /config/partners/:id` - Get configuration for a specific partner
+- `POST /config/partners` - Create a new partner configuration
+- `DELETE /config/partners/:id` - Delete a partner configuration
+
+#### Tasks Controller (`/tasks`)
+
+- `GET /tasks/convert-data/:partnerId/:merchantId` - Convert data for a specific partner and merchant
+
+#### Products Controller (`/products`)
+
+- `GET /products` - Search products with query parameters
+  - Query parameters:
+    - `query` - Search query
+    - `available` - Filter by availability
+    - `freeShipping` - Filter by free shipping
+    - `minPrice` - Minimum price filter
+    - `maxPrice` - Maximum price filter
+    - `currentPage` - Pagination page number
+    - `itemsPerPage` - Items per page
+    - `sortBy` - Field to sort by
+    - `sortDirection` - Sort direction (asc/desc)
+
+### Response Format
+
+All endpoints return responses in the following format:
+
+```json
+{
+  "status": number,  // HTTP status code
+  "message": object | string  // Response data or message
+}
+```
+
+### CORS Configuration
+
+The API has CORS enabled with the following allowed origins:
+
+- http://localhost:4200
+- https://ae.advertah.com
+- https://us.advertah.com
+- https://uk.advertah.com
+- https://sg.advertah.com
+- app.advertah.com
+
+Supported HTTP methods: GET, HEAD, PUT, PATCH, POST, DELETE
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).

@@ -1,0 +1,30 @@
+{
+  "partner_id": "awin",
+  "name": "AWIN Ltd",
+  "api": [],
+  "merchants": [],
+  "config": {
+    "partnerId": "awin",
+    "defaultProductMapping": {
+      "productId": "aw_product_id",
+      "productName": "product_name",
+      "description": "description",
+      "merchantId": "merchant_id",
+      "merchantName": "merchant_name",
+      "currency": "currency",
+      "price": "search_price",
+      "oldPrice": "product_price_old",
+      "available": "in_stock",
+      "image": "large_image",
+      "url": "aw_deep_link",
+      "category": "category_name",
+      "productType": "product_model",
+      "shippingCost": "delivery_cost",
+      "language": "language",
+      "gtin": "product_GTIN",
+      "rawData": "rawData",
+      "lastUpdatedAt": "last_updated"
+    },
+    "defaultDelimiter": ","
+  }
+}

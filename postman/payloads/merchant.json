@@ -1,0 +1,138 @@
+{
+  "merchant_id": "bernie_ohls",
+  "name": "Bernie Ohls",
+  "productFeed": {
+    "url": "https://productdata.awin.com/datafeed/download/",
+    "rawURL": "https://productdata.awin.com/datafeed/download/apikey/56e84b22b339b32850c44136209d6444/language/en/cid/97,98,142,144,146,129,595,539,147,149,613,626,135,163,159,169,161,170,137,171,548,174,183,179,175,172,623,139,614,189,194,141,205,198,206,203,208,199,204,201,61,62,72,73,71,75,76,77,63,80,64,83,84,85,65,86,88,90,89,91,67,92,94,33,53,57,603,60,66,128,130,133,212,207,209,210,211,68,69,213,214,220,221,70,224,225,226,227,228,229,4,5,11,537,15,14,6,21,22,24,25,7,30,29,32,619,8,35,618,42,9,652,44,50,634,230,538,235,238,550,241,245,242,521,576,575,577,579,281,283,285,286,282,287,288,627,173,193,177,196,379,648,181,645,384,387,646,598,611,391,393,647,395,631,602,570,600,405,187,411,412,413,414,415,416,417,649,418,419,420,99,100,101,107,110,111,113,114,115,116,118,121,122,127,581,624,123,594,125,421,605,604,599,422,433,434,435,436,532,428,474,475,476,477,423,608,437,438,441,445,446,447,424,451,448,453,449,452,450,425,455,457,459,460,456,458,426,616,463,464,465,466,467,427,625,597,473,469,617,470,429,479,430,481,615,483,484,485,487,488,529,596,431,432,489,490,361,633,362,366,367,368,371,369,363,372,373,374,377,375,536,535,364,378,380,381,365,383,385,386,390,392,394,396,397,399,402,404,406,407,540,542,544,546,547,246,247,252,559,255,248,256,265,259,632,260,261,262,557,249,266,267,268,269,612,251,277,250,272,271,561,560,347,348,354,350,351,349,356,357,358,359,360,586,588,589,328,338,493,635,495,507,563,564,565,566,567,569/fid/95541/bid/55505/columns/aw_deep_link,product_name,aw_product_id,merchant_product_id,merchant_image_url,description,merchant_category,search_price,merchant_name,merchant_id,category_name,category_id,aw_image_url,currency,store_price,delivery_cost,merchant_deep_link,language,last_updated,display_price,data_feed_id,brand_name,brand_id,colour,product_short_description,specifications,condition,product_model,model_number,dimensions,keywords,promotional_text,product_type,commission_group,merchant_product_category_path,merchant_product_second_category,merchant_product_third_category,rrp_price,saving,savings_percent,base_price,base_price_amount,base_price_text,product_price_old,delivery_restrictions,delivery_weight,warranty,terms_of_contract,delivery_time,in_stock,stock_quantity,valid_from,valid_to,is_for_sale,web_offer,pre_order,stock_status,size_stock_status,size_stock_amount,merchant_thumb_url,large_image,alternate_image,aw_thumb_url,alternate_image_two,alternate_image_three,alternate_image_four,reviews,average_rating,rating,number_available,ean,isbn,upc,mpn,parent_product_id,product_GTIN,basket_link,ShoppingNL%3Asize,ShoppingNL%3Amaterial,ShoppingNL%3Apattern,ShoppingNL%3Aenergy_label,ShoppingNL%3Aenergy_label_link,ShoppingNL%3Aenergy_label_logo,ShoppingNL%3Agoogle_taxonomy/format/csv/delimiter/%2C/compression/none/adultcontent/1/",
+    "params": [
+      {
+        "param": "apikey",
+        "type": "string",
+        "default": "56e84b22b339b32850c44136209d6444"
+      },
+      {
+        "param": "language",
+        "type": "string",
+        "default": "en"
+      },
+      {
+        "param": "cid",
+        "type": "string",
+        "default": "97,98,142,144,146,129,595,539,147,149,613,626,135,163,159,169,161,170,137,171,548,174,183,179,175,172,623,139,614,189,194,141,205,198,206,203,208,199,204,201,61,62,72,73,71,75,76,77,63,80,64,83,84,85,65,86,88,90,89,91,67,92,94,33,53,57,603,60,66,128,130,133,212,207,209,210,211,68,69,213,214,220,221,70,224,225,226,227,228,229,4,5,11,537,15,14,6,21,22,24,25,7,30,29,32,619,8,35,618,42,9,652,44,50,634,230,538,235,238,550,241,245,242,521,576,575,577,579,281,283,285,286,282,287,288,627,173,193,177,196,379,648,181,645,384,387,646,598,611,391,393,647,395,631,602,570,600,405,187,411,412,413,414,415,416,417,649,418,419,420,99,100,101,107,110,111,113,114,115,116,118,121,122,127,581,624,123,594,125,421,605,604,599,422,433,434,435,436,532,428,474,475,476,477,423,608,437,438,441,445,446,447,424,451,448,453,449,452,450,425,455,457,459,460,456,458,426,616,463,464,465,466,467,427,625,597,473,469,617,470,429,479,430,481,615,483,484,485,487,488,529,596,431,432,489,490,361,633,362,366,367,368,371,369,363,372,373,374,377,375,536,535,364,378,380,381,365,383,385,386,390,392,394,396,397,399,402,404,406,407,540,542,544,546,547,246,247,252,559,255,248,256,265,259,632,260,261,262,557,249,266,267,268,269,612,251,277,250,272,271,561,560,347,348,354,350,351,349,356,357,358,359,360,586,588,589,328,338,493,635,495,507,563,564,565,566,567,569"
+      },
+      {
+        "param": "fid",
+        "type": "string",
+        "default": "99817"
+      },
+      {
+        "param": "bid",
+        "type": "string",
+        "default": "68361,63565,64319,50725,63233,51113,63241,65321,51343,63245,64401,64579,63579,51959,52027,65511,63269,65601,64927,53341,64651,64305,63329,64329,66203,55345,63355,66329,56065,56141,64615,56281,66449,66517,63377,66569,56867,66603,56979,64991,57757,57809,64619,63393,64339,58789,58825,63435,64605,63451,67199,67239,63453,59573,63459,63463,67313,65003,64735,67381,63573,67563,63989,67569,67647,63511,67663,67695,63517,67759,62039,62175,63525,67807,64653,62437,62617,67963,63123,69005,69181,69529,69795,69999,70145,70863,70923,71459,72893,73381,75497,75765,79801,79879,81425,81713,81865,82029,82317,84691"
+      },
+      {
+        "param": "columns",
+        "type": "string",
+        "default": "aw_deep_link,product_name,aw_product_id,merchant_product_id,merchant_image_url,description,merchant_category,search_price,merchant_name,merchant_id,category_name,category_id,aw_image_url,currency,store_price,delivery_cost,merchant_deep_link,language,last_updated,display_price,data_feed_id,brand_name,brand_id,colour,product_short_description,specifications,condition,product_model,model_number,dimensions,keywords,promotional_text,product_type,commission_group,merchant_product_category_path,merchant_product_second_category,merchant_product_third_category,rrp_price,saving,savings_percent,base_price,base_price_amount,base_price_text,product_price_old,delivery_restrictions,delivery_weight,warranty,terms_of_contract,delivery_time,in_stock,stock_quantity,valid_from,valid_to,is_for_sale,web_offer,pre_order,stock_status,size_stock_status,size_stock_amount,merchant_thumb_url,large_image,alternate_image,aw_thumb_url,alternate_image_two,alternate_image_three,alternate_image_four,reviews,average_rating,rating,number_available,ean,isbn,upc,mpn,parent_product_id,product_GTIN,basket_link"
+      },
+      {
+        "param": "format",
+        "type": "string",
+        "default": "csv"
+      },
+      {
+        "param": "delimiter",
+        "type": "string",
+        "default": "%2C"
+      },
+      {
+        "param": "compression",
+        "type": "string",
+        "default": "none"
+      },
+      {
+        "param": "adultcontent",
+        "type": "string",
+        "default": "1"
+      }
+    ],
+    "paramMap": {
+      "data": "key/value",
+      "delimiter": "/"
+    },
+    "format": "csv"
+  },
+  "definitions": [],
+  "s3FilePath": "product_feeds/partners/awin/awin_bernie_ohls/awin_bernie_ohls.csv"
+}
+
+
+/*
+{
+  "merchant_id": "awin_cronjager_98661",
+  "name": "Cronjager",
+  "productFeed": {
+    "url": "https://productdata.awin.com/datafeed/download/",
+    "rawURL": "https://productdata.awin.com/datafeed/download/apikey/56e84b22b339b32850c44136209d6444/language/en/cid/97,98,142,144,146,129,595,539,147,149,613,626,135,163,159,169,161,170,137,171,548,174,183,179,175,172,623,139,614,189,194,141,205,198,206,203,208,199,204,201,61,62,72,73,71,75,76,77,63,80,64,83,84,85,65,86,88,90,89,91,67,92,94,33,53,57,603,60,66,128,130,133,212,207,209,210,211,68,69,213,214,220,221,70,224,225,226,227,228,229,4,5,11,537,15,14,6,21,22,24,25,7,30,29,32,619,8,35,618,42,9,652,44,50,634,230,538,235,238,550,241,245,242,521,576,575,577,579,281,283,285,286,282,287,288,627,173,193,177,196,379,648,181,645,384,387,646,598,611,391,393,647,395,631,602,570,600,405,187,411,412,413,414,415,416,417,649,418,419,420,99,100,101,107,110,111,113,114,115,116,118,121,122,127,581,624,123,594,125,421,605,604,599,422,433,434,435,436,532,428,474,475,476,477,423,608,437,438,441,445,446,447,424,451,448,453,449,452,450,425,455,457,459,460,456,458,426,616,463,464,465,466,467,427,625,597,473,469,617,470,429,479,430,481,615,483,484,485,487,488,529,596,431,432,489,490,361,633,362,366,367,368,371,369,363,372,373,374,377,375,536,535,364,378,380,381,365,383,385,386,390,392,394,396,397,399,402,404,406,407,540,542,544,546,547,246,247,252,559,255,248,256,265,259,632,260,261,262,557,249,266,267,268,269,612,251,277,250,272,271,561,560,347,348,354,350,351,349,356,357,358,359,360,586,588,589,328,338,493,635,495,507,563,564,565,566,567,569/fid/95541/bid/55505/columns/aw_deep_link,product_name,aw_product_id,merchant_product_id,merchant_image_url,description,merchant_category,search_price,merchant_name,merchant_id,category_name,category_id,aw_image_url,currency,store_price,delivery_cost,merchant_deep_link,language,last_updated,display_price,data_feed_id,brand_name,brand_id,colour,product_short_description,specifications,condition,product_model,model_number,dimensions,keywords,promotional_text,product_type,commission_group,merchant_product_category_path,merchant_product_second_category,merchant_product_third_category,rrp_price,saving,savings_percent,base_price,base_price_amount,base_price_text,product_price_old,delivery_restrictions,delivery_weight,warranty,terms_of_contract,delivery_time,in_stock,stock_quantity,valid_from,valid_to,is_for_sale,web_offer,pre_order,stock_status,size_stock_status,size_stock_amount,merchant_thumb_url,large_image,alternate_image,aw_thumb_url,alternate_image_two,alternate_image_three,alternate_image_four,reviews,average_rating,rating,number_available,ean,isbn,upc,mpn,parent_product_id,product_GTIN,basket_link,ShoppingNL%3Asize,ShoppingNL%3Amaterial,ShoppingNL%3Apattern,ShoppingNL%3Aenergy_label,ShoppingNL%3Aenergy_label_link,ShoppingNL%3Aenergy_label_logo,ShoppingNL%3Agoogle_taxonomy/format/csv/delimiter/%2C/compression/none/adultcontent/1/",
+    "params": [
+      {
+        "param": "apikey",
+        "type": "string",
+        "default": "56e84b22b339b32850c44136209d6444"
+      },
+      {
+        "param": "language",
+        "type": "string",
+        "default": "en"
+      },
+      {
+        "param": "cid",
+        "type": "string",
+        "default": "97,98,142,144,146,129,595,539,147,149,613,626,135,163,159,169,161,170,137,171,548,174,183,179,175,172,623,139,614,189,194,141,205,198,206,203,208,199,204,201,61,62,72,73,71,75,76,77,63,80,64,83,84,85,65,86,88,90,89,91,67,92,94,33,53,57,603,60,66,128,130,133,212,207,209,210,211,68,69,213,214,220,221,70,224,225,226,227,228,229,4,5,11,537,15,14,6,21,22,24,25,7,30,29,32,619,8,35,618,42,9,652,44,50,634,230,538,235,238,550,241,245,242,521,576,575,577,579,281,283,285,286,282,287,288,627,173,193,177,196,379,648,181,645,384,387,646,598,611,391,393,647,395,631,602,570,600,405,187,411,412,413,414,415,416,417,649,418,419,420,99,100,101,107,110,111,113,114,115,116,118,121,122,127,581,624,123,594,125,421,605,604,599,422,433,434,435,436,532,428,474,475,476,477,423,608,437,438,441,445,446,447,424,451,448,453,449,452,450,425,455,457,459,460,456,458,426,616,463,464,465,466,467,427,625,597,473,469,617,470,429,479,430,481,615,483,484,485,487,488,529,596,431,432,489,490,361,633,362,366,367,368,371,369,363,372,373,374,377,375,536,535,364,378,380,381,365,383,385,386,390,392,394,396,397,399,402,404,406,407,540,542,544,546,547,246,247,252,559,255,248,256,265,259,632,260,261,262,557,249,266,267,268,269,612,251,277,250,272,271,561,560,347,348,354,350,351,349,356,357,358,359,360,586,588,589,328,338,493,635,495,507,563,564,565,566,567,569"
+      },
+      {
+        "param": "fid",
+        "type": "string",
+        "default": "95541"
+      },
+      {
+        "param": "bid",
+        "type": "string",
+        "default": "55505"
+      },
+      {
+        "param": "columns",
+        "type": "string",
+        "default": "aw_deep_link,product_name,aw_product_id,merchant_product_id,merchant_image_url,description,merchant_category,search_price,merchant_name,merchant_id,category_name,category_id,aw_image_url,currency,store_price,delivery_cost,merchant_deep_link,language,last_updated,display_price,data_feed_id,brand_name,brand_id,colour,product_short_description,specifications,condition,product_model,model_number,dimensions,keywords,promotional_text,product_type,commission_group,merchant_product_category_path,merchant_product_second_category,merchant_product_third_category,rrp_price,saving,savings_percent,base_price,base_price_amount,base_price_text,product_price_old,delivery_restrictions,delivery_weight,warranty,terms_of_contract,delivery_time,in_stock,stock_quantity,valid_from,valid_to,is_for_sale,web_offer,pre_order,stock_status,size_stock_status,size_stock_amount,merchant_thumb_url,large_image,alternate_image,aw_thumb_url,alternate_image_two,alternate_image_three,alternate_image_four,reviews,average_rating,rating,number_available,ean,isbn,upc,mpn,parent_product_id,product_GTIN,basket_link,ShoppingNL%3Asize,ShoppingNL%3Amaterial,ShoppingNL%3Apattern,ShoppingNL%3Aenergy_label,ShoppingNL%3Aenergy_label_link,ShoppingNL%3Aenergy_label_logo,ShoppingNL%3Agoogle_taxonomy"
+      },
+      {
+        "param": "format",
+        "type": "string",
+        "default": "csv"
+      },
+      {
+        "param": "delimiter",
+        "type": "string",
+        "default": "%2C"
+      },
+      {
+        "param": "compression",
+        "type": "string",
+        "default": "none"
+      },
+      {
+        "param": "adultcontent",
+        "type": "string",
+        "default": "1"
+      }
+    ],
+    "paramMap": {
+      "data": "key/value",
+      "delimiter": "/"
+    },
+    "format": "csv"
+  },
+  "definitions": [],
+  "s3FilePath": "product_feeds/partners/awin/awin_cronjager_98661/awin_Cronjager_awin_cronjager_98661.csv"
+}
+*/

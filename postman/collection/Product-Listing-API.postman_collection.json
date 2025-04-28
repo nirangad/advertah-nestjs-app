@@ -1,0 +1,423 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6",
+    "name": "Product Listing API",
+    "description": "Collection of endpoints for the Product Listing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "App Controller",
+      "item": [
+        {
+          "name": "Get Welcome Message",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Returns a welcome greeting message"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Partners Controller",
+      "item": [
+        {
+          "name": "Get All Partners",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/partners",
+              "host": ["{{base_url}}"],
+              "path": ["partners"]
+            },
+            "description": "Retrieves all partners"
+          }
+        },
+        {
+          "name": "Get Partner by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/partners/:id",
+              "host": ["{{base_url}}"],
+              "path": ["partners", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                }
+              ]
+            },
+            "description": "Retrieves a specific partner by ID"
+          }
+        },
+        {
+          "name": "Create Partner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Example Partner\",\n    \"description\": \"Example partner description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/partners",
+              "host": ["{{base_url}}"],
+              "path": ["partners"]
+            },
+            "description": "Creates a new partner"
+          }
+        },
+        {
+          "name": "Update Partner",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Partner Name\",\n    \"description\": \"Updated partner description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/partners/:id",
+              "host": ["{{base_url}}"],
+              "path": ["partners", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                }
+              ]
+            },
+            "description": "Updates an existing partner"
+          }
+        },
+        {
+          "name": "Get Partner Merchants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/partners/:id/merchants",
+              "host": ["{{base_url}}"],
+              "path": ["partners", ":id", "merchants"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                }
+              ]
+            },
+            "description": "Retrieves all merchants for a partner"
+          }
+        },
+        {
+          "name": "Get Merchant by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/partners/:id/merchants/:merchant_id",
+              "host": ["{{base_url}}"],
+              "path": ["partners", ":id", "merchants", ":merchant_id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                },
+                {
+                  "key": "merchant_id",
+                  "value": "",
+                  "description": "Merchant ID"
+                }
+              ]
+            },
+            "description": "Retrieves a specific merchant for a partner"
+          }
+        },
+        {
+          "name": "Create Merchant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Example Merchant\",\n    \"description\": \"Example merchant description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/partners/:id/merchants",
+              "host": ["{{base_url}}"],
+              "path": ["partners", ":id", "merchants"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                }
+              ]
+            },
+            "description": "Creates a new merchant for a partner"
+          }
+        },
+        {
+          "name": "Update Merchant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Merchant Name\",\n    \"description\": \"Updated merchant description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/partners/:id/merchants/:merchant_id",
+              "host": ["{{base_url}}"],
+              "path": ["partners", ":id", "merchants", ":merchant_id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                },
+                {
+                  "key": "merchant_id",
+                  "value": "",
+                  "description": "Merchant ID"
+                }
+              ]
+            },
+            "description": "Updates an existing merchant for a partner"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Partner Configuration Controller",
+      "item": [
+        {
+          "name": "Get All Configurations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/config/partners",
+              "host": ["{{base_url}}"],
+              "path": ["config", "partners"]
+            },
+            "description": "Retrieves all partner configurations"
+          }
+        },
+        {
+          "name": "Get Configuration by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/config/partners/:id",
+              "host": ["{{base_url}}"],
+              "path": ["config", "partners", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                }
+              ]
+            },
+            "description": "Retrieves configuration for a specific partner"
+          }
+        },
+        {
+          "name": "Create Configuration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"partnerId\": \"example_partner_id\",\n    \"config\": {\n        \"key\": \"value\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/config/partners",
+              "host": ["{{base_url}}"],
+              "path": ["config", "partners"]
+            },
+            "description": "Creates a new partner configuration"
+          }
+        },
+        {
+          "name": "Delete Configuration",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/config/partners/:id",
+              "host": ["{{base_url}}"],
+              "path": ["config", "partners", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "Partner ID"
+                }
+              ]
+            },
+            "description": "Deletes a partner configuration"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks Controller",
+      "item": [
+        {
+          "name": "Convert Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tasks/convert-data/:partnerId/:merchantId",
+              "host": ["{{base_url}}"],
+              "path": ["tasks", "convert-data", ":partnerId", ":merchantId"],
+              "variable": [
+                {
+                  "key": "partnerId",
+                  "value": "",
+                  "description": "Partner ID"
+                },
+                {
+                  "key": "merchantId",
+                  "value": "",
+                  "description": "Merchant ID"
+                }
+              ]
+            },
+            "description": "Converts data for a specific partner and merchant"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products Controller",
+      "item": [
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products?query=*&available=false&freeShipping=false&minPrice=undefined&maxPrice=undefined&currentPage=1&itemsPerPage=20&sortBy=updatedAt&sortDirection=asc",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "*",
+                  "description": "Search query"
+                },
+                {
+                  "key": "available",
+                  "value": "false",
+                  "description": "Filter by availability"
+                },
+                {
+                  "key": "freeShipping",
+                  "value": "false",
+                  "description": "Filter by free shipping"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "undefined",
+                  "description": "Minimum price filter"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "undefined",
+                  "description": "Maximum price filter"
+                },
+                {
+                  "key": "currentPage",
+                  "value": "1",
+                  "description": "Pagination page number"
+                },
+                {
+                  "key": "itemsPerPage",
+                  "value": "20",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "updatedAt",
+                  "description": "Field to sort by"
+                },
+                {
+                  "key": "sortDirection",
+                  "value": "asc",
+                  "description": "Sort direction (asc/desc)"
+                }
+              ]
+            },
+            "description": "Searches products with various filters and sorting options"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
