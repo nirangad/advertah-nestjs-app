@@ -3,6 +3,7 @@ import * as process from 'process';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TasksService } from './tasks/tasks.service';
+import { PartnerService } from './partners/partner.service';
 // import mongoose from 'mongoose';
 
 async function bootstrap() {
@@ -12,6 +13,7 @@ async function bootstrap() {
 
   // Services
   const tasksService = app.get(TasksService);
+  const partnerService = app.get(PartnerService);
 
   // Initialize commander
   const program = new Command();
@@ -94,7 +96,58 @@ async function bootstrap() {
       }
     });
 
+  // Usage:
+  // npx nestjs-command update-products
+  program
+    .command('update-products')
+    .description('Convert data for a Partner and Merchant')
+    .option('-p, --partner <partner>', 'Partner ID')
+    .option('-m, --merchant <merchant>', 'Merchant ID')
+    .action(async () => {
+      const partners = await partnerService.getAllPartners();
+      try {
+        for (const partner of partners) {
+          let merchant: any;
+          for (merchant of partner.merchants) {
+            try {
+              console.log(`[CLI Update] Fetch Product feed`);
+              console.log(
+                `Merchant [${merchant.merchant_id} | ${merchant.name}] of Partner [ ${partner.partner_id} | ${partner.name} ]`,
+              );
+              console.log('Please wait...');
+              const s3FileName = await tasksService.downloadProductFeed(
+                partner.partner_id,
+                merchant.merchant_id,
+              );
+              console.log('Uploaded file: ', s3FileName);
+            } catch (error) {
+              console.error('Error while fetching data:', error);
+            }
+
+            try {
+              console.log(`[CLI Update] Product Database`);
+              console.log(
+                `Merchant [${merchant.merchant_id} | ${merchant.name}] of Partner [ ${partner.partner_id} | ${partner.name} ]`,
+              );
+              console.log('Please wait...');
+              await this.tasksService.convertData(
+                partner.partner_id,
+                merchant.merchant_id,
+              );
+            } catch (error) {
+              console.error('Error while converting data:', error);
+            }
+          }
+        }
+        this.readProductFeedCronJobMutex = false;
+        console.log('[CLI Update] updateFromProductFeedCronJob');
+      } catch (error) {
+        console.error('Error while fetching data. Exiting the CLI', error);
+      }
+    });
+
   // Parse command line arguments
   await program.parseAsync(process.argv);
 }
+
 bootstrap();
