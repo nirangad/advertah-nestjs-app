@@ -130,7 +130,7 @@ async function bootstrap() {
                 `Merchant [${merchant.merchant_id} | ${merchant.name}] of Partner [ ${partner.partner_id} | ${partner.name} ]`,
               );
               console.log('Please wait...');
-              await this.tasksService.convertData(
+              await tasksService.convertData(
                 partner.partner_id,
                 merchant.merchant_id,
               );
@@ -139,7 +139,6 @@ async function bootstrap() {
             }
           }
         }
-        this.readProductFeedCronJobMutex = false;
         console.log('[CLI Update] updateFromProductFeedCronJob');
       } catch (error) {
         console.error('Error while fetching data. Exiting the CLI', error);
