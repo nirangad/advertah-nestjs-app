@@ -162,7 +162,7 @@ export class UtilityService {
   typeCast(value, castTo) {
     switch (castTo) {
       case 'Boolean':
-        return this.toBoolean(value);
+        return this.toBoolean(value) ?? false;
       case 'Number':
         return this.toNumber(value);
       default:
@@ -170,14 +170,26 @@ export class UtilityService {
     }
   }
 
-  toBoolean(value): boolean {
-    if (value === undefined || value == null) {
+  toBoolean(value: unknown): boolean {
+    if (value === null || value === undefined) {
       return false;
     }
-    return value.toString().toLowerCase().trim() === 'true';
+
+    if (typeof value === 'boolean') {
+      return value;
+    }
+
+    if (typeof value === 'number') {
+      return value !== 0 && !isNaN(value);
+    }
+
+    const normalized = String(value).toLowerCase().trim();
+
+    return ['true', '1', 'yes', 'on'].includes(normalized);
   }
 
-  toNumber(value): number {
-    return parseFloat(value) || 0;
+  toNumber(value: unknown): number {
+    const num = parseFloat(String(value));
+    return isNaN(num) ? 0 : num;
   }
 }
