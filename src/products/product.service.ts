@@ -238,6 +238,17 @@ export class ProductService {
         fieldType.instance,
       );
 
+      // Validate numeric fields
+      if (
+        fieldType.instance === 'Number' &&
+        (isNaN(castedField) || castedField === null)
+      ) {
+        this.logger.warn(
+          `Invalid numeric value for field ${field}: ${csvDataRow[csvField]}`,
+        );
+        return; // Skip this field
+      }
+
       product[field] = castedField;
     });
 
