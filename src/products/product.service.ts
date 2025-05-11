@@ -233,6 +233,16 @@ export class ProductService {
         return;
       }
       const csvField = productMapping[field];
+      console.warn(
+        'CSV Field: ',
+        csvField,
+        'CSV Data Row: ',
+        csvDataRow[csvField],
+        'Field Type: ',
+        fieldType,
+        'Field: ',
+        field,
+      );
       const castedField = this.utilityService.typeCast(
         csvDataRow[csvField],
         fieldType.instance,
